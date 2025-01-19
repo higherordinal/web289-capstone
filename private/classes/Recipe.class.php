@@ -1,174 +1,311 @@
 <?php
 class Recipe extends DatabaseObject {
-    static protected $table_name = 'recipes';
-    static protected $db_columns = ['id', 'title', 'description', 'ingredients', 'instructions', 
-                                  'prep_time', 'cook_time', 'servings', 'image_path', 
-                                  'style_id', 'diet_id', 'user_id', 'rating', 'rating_count', 
-                                  'created_at', 'updated_at'];
+    static protected $table_name = 'recipe';
+    static protected $db_columns = ['recipe_id', 'user_id', 'title', 'description', 'style_id', 
+                                  'diet_id', 'type_id', 'prep_hours', 'prep_minutes', 
+                                  'cook_hours', 'cook_minutes', 'video_url', 'img_file_path', 
+                                  'alt_text', 'is_featured', 'created_date', 'created_time'];
+    static protected $primary_key = 'recipe_id';
 
-    public $id;
+    public $recipe_id;
+    public $user_id;
     public $title;
     public $description;
-    public $ingredients;
-    public $instructions;
-    public $prep_time;
-    public $cook_time;
-    public $servings;
-    public $image_path;
     public $style_id;
     public $diet_id;
-    public $user_id;
-    public $rating;
-    public $rating_count;
-    public $created_at;
-    public $updated_at;
-
-    // Cached related objects
-    private $style;
-    private $diet;
-    private $user;
+    public $type_id;
+    public $prep_hours;
+    public $prep_minutes;
+    public $cook_hours;
+    public $cook_minutes;
+    public $video_url;
+    public $img_file_path;
+    public $alt_text;
+    public $is_featured;
+    public $created_date;
+    public $created_time;
 
     public function __construct($args=[]) {
         $this->title = $args['title'] ?? '';
         $this->description = $args['description'] ?? '';
-        $this->ingredients = $args['ingredients'] ?? '';
-        $this->instructions = $args['instructions'] ?? '';
-        $this->prep_time = $args['prep_time'] ?? 0;
-        $this->cook_time = $args['cook_time'] ?? 0;
-        $this->servings = $args['servings'] ?? 1;
-        $this->image_path = $args['image_path'] ?? '';
         $this->style_id = $args['style_id'] ?? null;
         $this->diet_id = $args['diet_id'] ?? null;
-        $this->user_id = $args['user_id'] ?? null;
-        $this->rating = $args['rating'] ?? 0;
-        $this->rating_count = $args['rating_count'] ?? 0;
-        $this->created_at = $args['created_at'] ?? date('Y-m-d H:i:s');
-        $this->updated_at = $args['updated_at'] ?? date('Y-m-d H:i:s');
+        $this->type_id = $args['type_id'] ?? null;
+        $this->prep_hours = $args['prep_hours'] ?? 0;
+        $this->prep_minutes = $args['prep_minutes'] ?? 0;
+        $this->cook_hours = $args['cook_hours'] ?? 0;
+        $this->cook_minutes = $args['cook_minutes'] ?? 0;
+        $this->video_url = $args['video_url'] ?? '';
+        $this->img_file_path = $args['img_file_path'] ?? '';
+        $this->alt_text = $args['alt_text'] ?? '';
+        $this->is_featured = $args['is_featured'] ?? false;
+        $this->created_date = $args['created_date'] ?? date('Y-m-d');
+        $this->created_time = $args['created_time'] ?? date('H:i:s');
     }
 
     public function style() {
-        if(!isset($this->style) && isset($this->style_id)) {
-            $this->style = Style::find_by_id($this->style_id);
+        if($this->style_id) {
+            return RecipeAttribute::find_one($this->style_id, RecipeAttribute::TYPE_STYLE);
         }
-        return $this->style;
+        return null;
     }
 
     public function diet() {
-        if(!isset($this->diet) && isset($this->diet_id)) {
-            $this->diet = Diet::find_by_id($this->diet_id);
+        if($this->diet_id) {
+            return RecipeAttribute::find_one($this->diet_id, RecipeAttribute::TYPE_DIET);
         }
-        return $this->diet;
+        return null;
+    }
+
+    public function type() {
+        if($this->type_id) {
+            return RecipeAttribute::find_one($this->type_id, RecipeAttribute::TYPE_TYPE);
+        }
+        return null;
     }
 
     public function user() {
-        if(!isset($this->user) && isset($this->user_id)) {
-            $this->user = User::find_by_id($this->user_id);
+        if($this->user_id) {
+            return User::find_by_id($this->user_id);
         }
-        return $this->user;
+        return null;
     }
 
-    public static function find_by_page_with_relations($per_page=25, $offset=0, $search='', $style_id=null, $diet_id=null, $sort='newest') {
-        $sql = "SELECT r.* FROM " . static::$table_name . " r";
-        
-        // Build WHERE clause
+    public static function find_featured($limit=3) {
+        global $database;
+        $sql = "SELECT * FROM " . static::$table_name;
+        $sql .= " WHERE is_featured = TRUE";
+        $sql .= " ORDER BY created_date DESC, created_time DESC";
+        $sql .= " LIMIT " . $database->escape_string($limit);
+        return static::find_by_sql($sql);
+    }
+
+    public function image_path() {
+        return $this->img_file_path ? '/uploads/recipes/' . $this->img_file_path : '/images/recipe-placeholder.jpg';
+    }
+
+    public function author() {
+        return $this->user();
+    }
+
+    public function rating_average() {
+        $sql = "SELECT AVG(rating_value) as avg_rating FROM recipe_rating ";
+        $sql .= "WHERE recipe_id='" . db_escape(self::$database, $this->recipe_id) . "'";
+        $result = self::$database->query($sql);
+        if(!$result) {
+            return 0;
+        }
+        $row = $result->fetch_assoc();
+        return $row['avg_rating'] ? round($row['avg_rating'], 1) : 0;
+    }
+
+    public function rating_count() {
+        $sql = "SELECT COUNT(*) as count FROM recipe_rating ";
+        $sql .= "WHERE recipe_id='" . db_escape(self::$database, $this->recipe_id) . "'";
+        $result = self::$database->query($sql);
+        if(!$result) {
+            return 0;
+        }
+        $row = $result->fetch_assoc();
+        return (int)$row['count'];
+    }
+
+    public static function count_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null) {
+        $sql = "SELECT COUNT(*) FROM " . static::$table_name;
         $where_clauses = [];
-        $params = [];
         
         if(!empty($search)) {
-            $where_clauses[] = "(r.title LIKE ? OR r.description LIKE ?)";
-            $params[] = "%{$search}%";
-            $params[] = "%{$search}%";
+            $database = static::get_database();
+            $search = db_escape($database, $search);
+            $where_clauses[] = "(title LIKE '%{$search}%' OR description LIKE '%{$search}%')";
         }
         
         if(!empty($style_id)) {
-            $where_clauses[] = "r.style_id = ?";
-            $params[] = $style_id;
+            $style_id = (int) $style_id;
+            $where_clauses[] = "style_id = {$style_id}";
         }
         
         if(!empty($diet_id)) {
-            $where_clauses[] = "r.diet_id = ?";
-            $params[] = $diet_id;
+            $diet_id = (int) $diet_id;
+            $where_clauses[] = "diet_id = {$diet_id}";
+        }
+        
+        if(!empty($type_id)) {
+            $type_id = (int) $type_id;
+            $where_clauses[] = "type_id = {$type_id}";
         }
         
         if(!empty($where_clauses)) {
-            $sql .= " WHERE " . implode(' AND ', $where_clauses);
+            $sql .= " WHERE " . implode(" AND ", $where_clauses);
         }
         
-        // Add ORDER BY clause based on sort parameter
+        $database = static::get_database();
+        $result = mysqli_query($database, $sql);
+        $row = mysqli_fetch_array($result);
+        mysqli_free_result($result);
+        return $row[0] ?? 0;
+    }
+
+    public static function find_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null, $sort='newest', $per_page=25, $offset=0) {
+        $sql = "SELECT * FROM " . static::$table_name;
+        $where_clauses = [];
+        
+        if(!empty($search)) {
+            $database = static::get_database();
+            $search = db_escape($database, $search);
+            $where_clauses[] = "(title LIKE '%{$search}%' OR description LIKE '%{$search}%')";
+        }
+        
+        if(!empty($style_id)) {
+            $style_id = (int) $style_id;
+            $where_clauses[] = "style_id = {$style_id}";
+        }
+        
+        if(!empty($diet_id)) {
+            $diet_id = (int) $diet_id;
+            $where_clauses[] = "diet_id = {$diet_id}";
+        }
+        
+        if(!empty($type_id)) {
+            $type_id = (int) $type_id;
+            $where_clauses[] = "type_id = {$type_id}";
+        }
+        
+        if(!empty($where_clauses)) {
+            $sql .= " WHERE " . implode(" AND ", $where_clauses);
+        }
+        
+        // Add sorting
         switch($sort) {
             case 'oldest':
-                $sql .= " ORDER BY r.created_at ASC";
+                $sql .= " ORDER BY created_date ASC, created_time ASC";
                 break;
-            case 'rating':
-                $sql .= " ORDER BY r.rating DESC, r.rating_count DESC";
+            case 'title':
+                $sql .= " ORDER BY title ASC";
                 break;
-            case 'popular':
-                $sql .= " ORDER BY r.rating_count DESC, r.rating DESC";
+            case 'newest':
+            default:
+                $sql .= " ORDER BY created_date DESC, created_time DESC";
+                break;
+        }
+        
+        // Add pagination
+        $sql .= " LIMIT " . (int)$per_page . " OFFSET " . (int)$offset;
+        
+        return static::find_by_sql($sql);
+    }
+
+    public static function find_by_page_with_relations($per_page = 25, $offset = 0, $search = '', $style_id = null, $diet_id = null, $type_id = null, $sort = 'newest') {
+        $sql = "SELECT r.* ";
+        $sql .= "FROM " . static::$table_name . " r ";
+        
+        $where_clauses = [];
+        
+        if(!empty($search)) {
+            $database = static::get_database();
+            $search = db_escape($database, $search);
+            $where_clauses[] = "(r.title LIKE '%{$search}%' OR r.description LIKE '%{$search}%')";
+        }
+        
+        if(!empty($style_id)) {
+            $style_id = (int) $style_id;
+            $where_clauses[] = "r.style_id = {$style_id}";
+        }
+        
+        if(!empty($diet_id)) {
+            $diet_id = (int) $diet_id;
+            $where_clauses[] = "r.diet_id = {$diet_id}";
+        }
+        
+        if(!empty($type_id)) {
+            $type_id = (int) $type_id;
+            $where_clauses[] = "r.type_id = {$type_id}";
+        }
+        
+        if(!empty($where_clauses)) {
+            $sql .= " WHERE " . implode(" AND ", $where_clauses);
+        }
+        
+        // Add sorting
+        switch($sort) {
+            case 'oldest':
+                $sql .= " ORDER BY r.created_date ASC, r.created_time ASC";
                 break;
             case 'title':
                 $sql .= " ORDER BY r.title ASC";
                 break;
-            default: // newest
-                $sql .= " ORDER BY r.created_at DESC";
+            case 'rating':
+                $sql .= " ORDER BY r.created_date DESC"; // Default to newest if no rating
+                break;
+            case 'newest':
+            default:
+                $sql .= " ORDER BY r.created_date DESC, r.created_time DESC";
+                break;
         }
         
-        $sql .= " LIMIT ? OFFSET ?";
-        $params[] = $per_page;
-        $params[] = $offset;
+        $sql .= " LIMIT {$per_page} OFFSET {$offset}";
         
-        return static::find_by_sql_with_params($sql, $params);
+        // Get the base recipe data
+        $recipes = static::find_by_sql($sql);
+        
+        // Now get ratings for each recipe
+        if (!empty($recipes)) {
+            $recipe_ids = array_map(function($recipe) { 
+                return $recipe->recipe_id; 
+            }, $recipes);
+            
+            $ids_string = implode(',', $recipe_ids);
+            
+            // Get average ratings
+            $rating_sql = "SELECT recipe_id, COALESCE(AVG(rating_value), 0) as rating ";
+            $rating_sql .= "FROM recipe_rating ";
+            $rating_sql .= "WHERE recipe_id IN ({$ids_string}) ";
+            $rating_sql .= "GROUP BY recipe_id";
+            
+            $database = static::get_database();
+            $rating_result = mysqli_query($database, $rating_sql);
+            
+            if ($rating_result) {
+                $ratings = [];
+                while ($row = mysqli_fetch_assoc($rating_result)) {
+                    $ratings[$row['recipe_id']] = $row['rating'];
+                }
+                mysqli_free_result($rating_result);
+                
+                // Add ratings to recipe objects
+                foreach ($recipes as $recipe) {
+                    $recipe->rating = $ratings[$recipe->recipe_id] ?? 0;
+                }
+            }
+        }
+        
+        return $recipes;
     }
 
-    public static function count_all_filtered($search='', $style_id=null, $diet_id=null) {
-        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name . " r";
-        
-        // Build WHERE clause
-        $where_clauses = [];
-        $params = [];
-        
-        if(!empty($search)) {
-            $where_clauses[] = "(r.title LIKE ? OR r.description LIKE ?)";
-            $params[] = "%{$search}%";
-            $params[] = "%{$search}%";
+    public static function find_by_sql($sql) {
+        $database = static::get_database();
+        $result = mysqli_query($database, $sql);
+        if(!$result) {
+            exit("Database query failed: " . mysqli_error($database));
         }
-        
-        if(!empty($style_id)) {
-            $where_clauses[] = "r.style_id = ?";
-            $params[] = $style_id;
-        }
-        
-        if(!empty($diet_id)) {
-            $where_clauses[] = "r.diet_id = ?";
-            $params[] = $diet_id;
-        }
-        
-        if(!empty($where_clauses)) {
-            $sql .= " WHERE " . implode(' AND ', $where_clauses);
-        }
-        
-        $result = static::find_by_sql_with_params($sql, $params);
-        return $result[0]->count ?? 0;
-    }
 
-    protected static function find_by_sql_with_params($sql, $params=[]) {
-        global $database;
-        $stmt = $database->prepare($sql);
-        if(!empty($params)) {
-            $types = str_repeat('s', count($params));
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return static::instantiate_from_result($result);
-    }
-
-    protected static function instantiate_from_result($result) {
+        // Convert results into objects
         $object_array = [];
-        while($record = $result->fetch_assoc()) {
-            $object_array[] = static::instantiate($record);
+        while($record = mysqli_fetch_assoc($result)) {
+            $object_array[] = parent::instantiate($record);
         }
-        $result->free();
+        mysqli_free_result($result);
         return $object_array;
+    }
+
+    protected static function instantiate($record) {
+        $object = new static;
+        foreach($record as $property => $value) {
+            if(property_exists($object, $property)) {
+                $object->$property = $value;
+            }
+        }
+        return $object;
     }
 
     protected function validate() {
@@ -176,21 +313,34 @@ class Recipe extends DatabaseObject {
 
         if(is_blank($this->title)) {
             $this->errors[] = "Title cannot be blank.";
+        } elseif (!has_length($this->title, array('min' => 3, 'max' => 100))) {
+            $this->errors[] = "Title must be between 3 and 100 characters.";
         }
-        if(is_blank($this->ingredients)) {
-            $this->errors[] = "Ingredients cannot be blank.";
+
+        if(is_blank($this->description)) {
+            $this->errors[] = "Description cannot be blank.";
+        } elseif (!has_length($this->description, array('max' => 255))) {
+            $this->errors[] = "Description cannot exceed 255 characters.";
         }
-        if(is_blank($this->instructions)) {
-            $this->errors[] = "Instructions cannot be blank.";
+
+        if(!is_blank($this->video_url) && !preg_match('/^https:\/\//', $this->video_url)) {
+            $this->errors[] = "Video URL must start with https://";
         }
-        if(!isset($this->style_id)) {
-            $this->errors[] = "Style must be selected.";
+
+        if($this->prep_hours < 0) {
+            $this->errors[] = "Preparation hours cannot be negative.";
         }
-        if(!isset($this->diet_id)) {
-            $this->errors[] = "Diet must be selected.";
+
+        if($this->prep_minutes < 0 || $this->prep_minutes > 59) {
+            $this->errors[] = "Preparation minutes must be between 0 and 59.";
         }
-        if(!isset($this->user_id)) {
-            $this->errors[] = "User must be set.";
+
+        if($this->cook_hours < 0) {
+            $this->errors[] = "Cooking hours cannot be negative.";
+        }
+
+        if($this->cook_minutes < 0 || $this->cook_minutes > 59) {
+            $this->errors[] = "Cooking minutes must be between 0 and 59.";
         }
 
         return $this->errors;

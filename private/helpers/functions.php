@@ -51,4 +51,14 @@ if(!function_exists('money_format')) {
   }
 }
 
+function display_session_message() {
+    global $session;
+    $msg = $session->message();
+    if(isset($msg) && $msg != '') {
+        $session->clear_message();
+        return '<div class="message">' . h($msg) . '</div>';
+    }
+    return '';
+}
+
 ?>

@@ -30,11 +30,6 @@ define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 // Set this to your domain in production, leave empty for local development
 define('WWW_ROOT', '');  // Production example: '/flavor_connect'
 
-// Application Settings
-define('APP_NAME', 'Flavor Connect');
-define('APP_EMAIL', 'admin@flavorconnect.com');
-define('ITEMS_PER_PAGE', 10);
-
 // Upload Settings
 define('MAX_FILE_SIZE', 5242880);  // 5MB in bytes
 define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png', 'image/gif']);
