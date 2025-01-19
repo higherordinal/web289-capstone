@@ -1,6 +1,9 @@
 <?php
 require_once('../private/initialize.php');
+
 $page_title = 'Welcome to Flavor Connect';
+$page_style = 'home';
+include(SHARED_PATH . '/header.php');
 
 // Get featured recipes
 $featured_recipes = Recipe::find_featured(3);
@@ -15,7 +18,6 @@ $styles = RecipeAttribute::get_all(RecipeAttribute::TYPE_STYLE);
 $diets = RecipeAttribute::get_all(RecipeAttribute::TYPE_DIET);
 $types = RecipeAttribute::get_all(RecipeAttribute::TYPE_TYPE);
 
-include(SHARED_PATH . '/header.php');
 ?>
 
 <!-- Hero Section -->

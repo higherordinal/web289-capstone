@@ -32,6 +32,17 @@ INSERT INTO recipe (user_id, title, description, style_id, diet_id, type_id, pre
  (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
  1, 0, 0, 30, FALSE, CURRENT_DATE, CURRENT_TIME);
 
+-- Add image columns to recipe table
+ALTER TABLE recipe
+ADD COLUMN img_file_path VARCHAR(255) DEFAULT NULL,
+ADD COLUMN alt_text TEXT DEFAULT NULL;
+
+-- Update Buddha Bowl image and alt text
+UPDATE recipe 
+SET img_file_path = '/images/recipes/buddha-bowl.jpg',
+    alt_text = 'A beautifully arranged vegetarian Buddha bowl featuring crispy tofu, sliced avocado, edamame, shredded carrots, cucumber, fresh herbs, and bean sprouts in a black bowl, with a small blue and white patterned sauce dish'
+WHERE title LIKE '%Buddha Bowl%';
+
 -- Insert ingredients for Spaghetti Carbonara
 INSERT INTO recipe_ingredient (recipe_id, measurement_id, quantity, ingredient_text) VALUES
 ((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 

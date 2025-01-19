@@ -1,0 +1,115 @@
+/* Footer Styles */
+.site-footer {
+    flex-shrink: 0;
+    background: var(--color-black);
+    color: var(--color-white);
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-2xl);
+}
+
+.footer-section {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.footer-section h3 {
+    color: var(--color-white);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+    padding-bottom: var(--spacing-md);
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--color-gold);
+}
+
+.footer-links {
+    display: grid;
+    gap: var(--spacing-sm);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links a {
+    color: var(--color-gray-400);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: start;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.footer-links a:hover {
+    color: var(--color-gold);
+}
+
+.footer-social {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: start;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
+
+.footer-social a {
+    color: var(--color-gray-400);
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.footer-social a:hover {
+    color: var(--color-gold);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.footer-bottom {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-gray-800);
+    text-align: center;
+    color: var(--color-gray-500);
+    font-size: 0.9rem;
+    display: grid;
+    place-items: center;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        gap: var(--spacing-xl);
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-links a,
+    .footer-social {
+        justify-content: center;
+    }
+}

@@ -21,6 +21,28 @@ class User extends DatabaseObject {
         $this->is_active = $args['is_active'] ?? true;
     }
 
+    public static function find_by_username($username) {
+        $sql = "SELECT * FROM " . static::$table_name . " ";
+        $sql .= "WHERE username='" . self::$database->escape_string($username) . "'";
+        $obj_array = static::find_by_sql($sql);
+        if(!empty($obj_array)) {
+            return array_shift($obj_array);
+        } else {
+            return false;
+        }
+    }
+
+    public static function find_by_email($email) {
+        $sql = "SELECT * FROM " . static::$table_name . " ";
+        $sql .= "WHERE email='" . self::$database->escape_string($email) . "'";
+        $obj_array = static::find_by_sql($sql);
+        if(!empty($obj_array)) {
+            return array_shift($obj_array);
+        } else {
+            return false;
+        }
+    }
+
     public function verify_password($password) {
         return password_verify($password, $this->password_hash);
     }

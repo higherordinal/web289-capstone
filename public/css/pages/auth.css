@@ -1,0 +1,230 @@
+/* Auth Pages Styling */
+:root {
+    /* Colors with improved contrast ratios */
+    --color-primary: #2c3e50;     /* Matches header color */
+    --color-primary-dark: #1a2632; /* Darker version for hover states */
+    --color-accent: #f1c40f;      /* Gold accent color */
+    --color-accent-dark: #f39c12; /* Darker gold for hover */
+    --color-text: #2d3748;        /* Dark gray for main text */
+    --color-text-muted: #4a5568;  /* Medium gray for secondary text */
+    --color-error: #c53030;       /* Dark red for errors */
+    --color-error-light: #fff5f5; /* Light red background */
+    --color-error-border: #feb2b2;/* Light red border */
+    --color-border: #cbd5e0;      /* Light gray border */
+    --color-focus: rgba(44, 62, 80, 0.3); /* Focus ring color */
+}
+
+body {
+    background-color: var(--color-gray-100) !important;
+}
+
+.auth-container {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background: #f8f9fa;
+    display: grid;
+    place-items: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+    background: #ffffff !important;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.auth-header {
+    padding: 2rem;
+    background: var(--color-primary);
+    color: white;
+    text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.auth-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: white;
+    font-weight: 600;
+}
+
+.auth-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+.auth-body {
+    padding: 2rem;
+    background: #ffffff !important;
+    display: grid;
+    gap: 1.5rem;
+}
+
+.auth-form {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.form-label {
+    color: var(--color-text);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.required {
+    color: var(--color-error);
+    margin-left: 0.25rem;
+}
+
+.form-text {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-border);
+    border-radius: 4px;
+    background: white;
+    color: var(--color-text);
+    transition: all 0.2s;
+}
+
+.form-control:hover {
+    border-color: var(--color-primary);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus);
+}
+
+.form-control.is-invalid {
+    border-color: var(--color-error);
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(197, 48, 48, 0.3);
+}
+
+.invalid-feedback {
+    color: var(--color-error);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+.form-check {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.form-check-input {
+    margin: 0;
+    width: 1rem;
+    height: 1rem;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 3px var(--color-focus);
+}
+
+.form-check-label {
+    color: var(--color-text);
+    font-size: 0.875rem;
+}
+
+.auth-actions {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-auth:hover,
+.btn-auth:focus {
+    background-color: var(--color-accent-dark);
+    transform: translateY(-1px);
+}
+
+.btn-auth:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.3);
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.auth-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.auth-link:hover,
+.auth-link:focus {
+    color: var(--color-primary-dark);
+    text-decoration: none;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    border: 2px solid currentColor;
+}
+
+.alert-danger {
+    background: var(--color-error-light);
+    color: var(--color-error);
+    border-color: var(--color-error-border);
+}
+
+.alert p {
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.alert li {
+    margin-bottom: 0.25rem;
+}
+
+.alert li:last-child {
+    margin-bottom: 0;
+}

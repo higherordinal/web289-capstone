@@ -1,29 +1,28 @@
 <?php
 require_once('../../private/initialize.php');
-$page_title = 'Log In';
 
-// Redirect if already logged in
-if($session->is_logged_in()) {
-    redirect_to(url_for('/recipes/index.php'));
-}
+$page_title = 'Login';
+$page_style = 'auth';
+include(SHARED_PATH . '/header.php');
 
-// Initialize variables
-$username = '';
 $errors = [];
+$username = '';
+$password = '';
 
 if(is_post_request()) {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     $remember = isset($_POST['remember']);
     
-    // Validate presence
-    if(empty($username)) {
-        $errors[] = "Username or email cannot be blank.";
+    // Validations
+    if(is_blank($username)) {
+        $errors['username'] = "Username cannot be blank.";
     }
-    if(empty($password)) {
-        $errors[] = "Password cannot be blank.";
+    if(is_blank($password)) {
+        $errors['password'] = "Password cannot be blank.";
     }
     
+    // if there were no errors, try to login
     if(empty($errors)) {
         // Check if input is email or username
         $user = filter_var($username, FILTER_VALIDATE_EMAIL) 
@@ -31,7 +30,7 @@ if(is_post_request()) {
                 : User::find_by_username($username);
         
         if($user && $user->verify_password($password)) {
-            if($user->status === 'inactive') {
+            if($user->is_active === false) {
                 $errors[] = "Your account has been deactivated. Please contact support.";
             } else {
                 // Set remember me cookie if requested
@@ -64,77 +63,83 @@ if(is_post_request()) {
         }
     }
 }
-
-include(SHARED_PATH . '/header.php');
 ?>
 
-<link rel="stylesheet" href="<?php echo url_for('/css/auth.css'); ?>">
-
-<div class="auth-page">
-    <div class="auth-container">
-        <h1>Welcome Back</h1>
-        
-        <?php echo display_errors($errors); ?>
-        <?php echo display_session_message(); ?>
-        
-        <form action="<?php echo url_for('/users/login.php'); ?>" method="POST" class="auth-form">
-            <div class="form-group">
-                <label for="username">Username or Email</label>
-                <input type="text" id="username" name="username" value="<?php echo h($username); ?>" 
-                       required autofocus>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="password-group">
-                    <input type="password" id="password" name="password" required>
-                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="checkbox-label">
-                    <input type="checkbox" name="remember" id="remember">
-                    Remember me
-                </label>
-            </div>
-            
-            <button type="submit" class="auth-button">Log In</button>
-        </form>
-        
-        <div class="auth-links">
-            <p><a href="<?php echo url_for('/users/forgot_password.php'); ?>">Forgot Password?</a></p>
-            <p>Don't have an account? <a href="<?php echo url_for('/users/register.php'); ?>">Sign Up</a></p>
+<div class="auth-container">
+    <div class="auth-card" role="main">
+        <div class="auth-header">
+            <h1 id="login-title">Welcome Back</h1>
+            <p>Sign in to continue to FlavorConnect</p>
         </div>
         
-        <div class="social-login">
-            <a href="<?php echo url_for('/auth/google'); ?>" class="social-button google-button">
-                <i class="fab fa-google"></i> Continue with Google
-            </a>
-            <a href="<?php echo url_for('/auth/facebook'); ?>" class="social-button facebook-button">
-                <i class="fab fa-facebook"></i> Continue with Facebook
-            </a>
+        <div class="auth-body">
+            <?php if(!empty($errors)) { ?>
+                <div class="alert alert-danger" role="alert" aria-live="polite">
+                    <?php if(isset($errors['login'])) { ?>
+                        <p><?php echo $errors['login']; ?></p>
+                    <?php } else { ?>
+                        <p>Please fix the following errors:</p>
+                        <ul>
+                            <?php foreach($errors as $error) { ?>
+                                <li><?php echo $error; ?></li>
+                            <?php } ?>
+                        </ul>
+                    <?php } ?>
+                </div>
+            <?php } ?>
+
+            <form action="<?php echo url_for('/users/login.php'); ?>" method="post" class="auth-form" 
+                  aria-labelledby="login-title">
+                <div class="form-group">
+                    <label for="username" class="form-label">
+                        Username or Email
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" class="form-control <?php echo isset($errors['username']) ? 'is-invalid' : ''; ?>"
+                           id="username" name="username" value="<?php echo h($username); ?>" 
+                           required aria-required="true"
+                           aria-describedby="username-help username-error"
+                           placeholder="Enter your username or email">
+                    <small id="username-help" class="form-text">Enter your username or email address to log in</small>
+                    <?php if(isset($errors['username'])) { ?>
+                        <div id="username-error" class="invalid-feedback"><?php echo $errors['username']; ?></div>
+                    <?php } ?>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        Password
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <input type="password" class="form-control <?php echo isset($errors['password']) ? 'is-invalid' : ''; ?>"
+                           id="password" name="password" 
+                           required aria-required="true"
+                           aria-describedby="password-help password-error"
+                           placeholder="Enter your password">
+                    <small id="password-help" class="form-text">Enter your account password</small>
+                    <?php if(isset($errors['password'])) { ?>
+                        <div id="password-error" class="invalid-feedback"><?php echo $errors['password']; ?></div>
+                    <?php } ?>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                </div>
+
+                <div class="auth-actions">
+                    <button type="submit" class="btn-auth">Sign In</button>
+                </div>
+
+                <div class="auth-links">
+                    <a href="<?php echo url_for('/users/forgot_password.php'); ?>" class="auth-link">Forgot Password?</a>
+                    <a href="<?php echo url_for('/users/register.php'); ?>" class="auth-link">Create Account</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-<script>
-function togglePassword(inputId) {
-    const input = document.getElementById(inputId);
-    const icon = input.nextElementSibling.querySelector('i');
-    
-    if(input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-}
-</script>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

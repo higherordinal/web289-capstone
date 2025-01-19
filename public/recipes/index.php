@@ -1,6 +1,9 @@
 <?php
 require_once('../../private/initialize.php');
+
 $page_title = 'Recipe Gallery';
+$page_style = 'recipe-gallery';
+include(SHARED_PATH . '/header.php');
 
 // Get filter parameters
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -33,8 +36,6 @@ if ($current_page > $total_pages && $total_pages > 0) {
 
 // Get filtered and sorted recipes
 $recipes = Recipe::find_by_page_with_relations($per_page, $offset, $search, $style_id, $diet_id, $type_id, $sort);
-
-include(SHARED_PATH . '/header.php');
 
 // Helper function to maintain query parameters
 function build_query_string($params_to_update=[]) {

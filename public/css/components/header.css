@@ -1,0 +1,226 @@
+/* Header Styles */
+.site-header {
+    background: var(--color-black);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    padding: 0.5rem 0;
+}
+
+.site-header .container {
+    display: grid;
+    grid-template-columns: auto minmax(200px, 1fr) auto;
+    gap: var(--spacing-lg);
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* Logo */
+.logo {
+    display: grid;
+    place-items: center;
+}
+
+.logo-link {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: var(--spacing-sm);
+    align-items: center;
+    color: var(--color-white);
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+.logo-icon {
+    color: var(--color-gold);
+}
+
+.logo-text {
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+.logo-text .accent {
+    color: var(--color-gold);
+}
+
+/* Navigation */
+.main-nav {
+    justify-self: end;
+}
+
+.main-nav ul {
+    display: grid;
+    grid-auto-flow: column;
+    gap: var(--spacing-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.main-nav a {
+    color: var(--color-white);
+    text-decoration: none;
+    font-weight: 500;
+    display: grid;
+    grid-auto-flow: column;
+    gap: var(--spacing-xs);
+    align-items: center;
+    padding: 0.5rem var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.main-nav a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-gold);
+}
+
+.main-nav i {
+    font-size: 0.9rem;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--color-white);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    min-width: 200px;
+    padding: var(--spacing-xs) 0;
+    display: none;
+    z-index: 1000;
+    margin-top: 0.5rem;
+}
+
+.dropdown-menu.show {
+    display: grid;
+    grid-auto-flow: row;
+    animation: fadeIn 0.2s ease;
+}
+
+.dropdown-menu a {
+    color: var(--color-gray-800);
+    padding: var(--spacing-sm) var(--spacing-md);
+    display: block;
+}
+
+.dropdown-menu a:hover {
+    background: var(--color-gray-100);
+    color: var(--color-primary);
+}
+
+/* Search Bar */
+.search-bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.5rem;
+    justify-self: stretch;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: var(--color-white);
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    min-width: 0; /* Prevents input from overflowing grid */
+}
+
+.search-bar input::placeholder {
+    color: var(--color-gray-400);
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.search-bar button {
+    background: transparent;
+    border: none;
+    color: var(--color-gray-400);
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.search-bar button:hover {
+    color: var(--color-white);
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+}
+
+@media (max-width: 768px) {
+    .site-header .container {
+        grid-template-columns: auto 1fr auto;
+    }
+
+    .mobile-menu-toggle {
+        display: grid;
+        place-items: center;
+    }
+
+    .main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-black);
+        padding: var(--spacing-md);
+    }
+
+    .main-nav.show {
+        display: grid;
+        grid-auto-flow: row;
+    }
+
+    .main-nav ul {
+        grid-auto-flow: row;
+        gap: var(--spacing-md);
+    }
+
+    .dropdown-menu {
+        position: static;
+        background: transparent;
+        box-shadow: none;
+        padding-left: var(--spacing-lg);
+    }
+
+    .dropdown-menu a {
+        color: var(--color-white);
+    }
+
+    .search-bar {
+        display: none;
+    }
+
+    .main-nav.show .search-bar {
+        display: grid;
+        margin: var(--spacing-md) 0;
+    }
+}

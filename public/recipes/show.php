@@ -29,6 +29,7 @@ if(is_post_request() && $session->is_logged_in()) {
 $reviews = Review::find_by_recipe_id($recipe->recipe_id);
 
 $page_title = $recipe->title;
+$page_style = 'recipe-show';
 include(SHARED_PATH . '/header.php');
 ?>
 
@@ -40,8 +41,8 @@ include(SHARED_PATH . '/header.php');
     </a>
     <div class="recipe-header-image">
         <?php if($recipe->img_file_path) { ?>
-            <img src="<?php echo url_for('/images/' . $recipe->img_file_path); ?>" 
-                 alt="<?php echo h($recipe->title); ?>">
+            <img src="<?php echo url_for($recipe->image_path()); ?>" 
+                 alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
         <?php } else { ?>
             <img src="<?php echo url_for('/images/recipe-placeholder.jpg'); ?>" 
                  alt="Recipe placeholder image">
