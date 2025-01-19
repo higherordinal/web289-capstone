@@ -23,7 +23,7 @@ require_once(PRIVATE_PATH . '/core/functions.php');
 require_once(PRIVATE_PATH . '/core/database_functions.php');
 require_once(PRIVATE_PATH . '/core/db_credentials.php');
 require_once(PRIVATE_PATH . '/core/validation_functions.php');
-require_once(PRIVATE_PATH . '/core/status_error_functions.php');
+require_once(PRIVATE_PATH . '/core/error_functions.php');
 require_once(PRIVATE_PATH . '/core/auth.php');
 
 // Autoload class definitions
