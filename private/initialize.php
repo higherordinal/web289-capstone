@@ -19,13 +19,11 @@ define("WWW_ROOT", $doc_root);
 
 // Load helper functions
 require_once(PRIVATE_PATH . '/helpers/functions.php');
-require_once(PRIVATE_PATH . '/helpers/validation_functions.php');
-require_once(PRIVATE_PATH . '/helpers/auth.php');
 require_once(PRIVATE_PATH . '/helpers/database_functions.php');
 require_once(PRIVATE_PATH . '/helpers/db_credentials.php');
-
-// Load base DatabaseObject class first
-require_once(PRIVATE_PATH . '/classes/DatabaseObject.class.php');
+require_once(PRIVATE_PATH . '/helpers/validation_functions.php');
+require_once(PRIVATE_PATH . '/helpers/status_error_functions.php');
+require_once(PRIVATE_PATH . '/helpers/auth.php');
 
 // Autoload class definitions
 function my_autoload($class) {
@@ -36,11 +34,15 @@ function my_autoload($class) {
         }
     }
 }
+
+// Register autoloader
 spl_autoload_register('my_autoload');
 
-// Initialize objects
+// Initialize database connection
 $database = db_connect();
 DatabaseObject::set_database($database);
+
+// Create session object
 $session = new Session();
 
 // Development mode error reporting

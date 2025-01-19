@@ -1,5 +1,5 @@
 <?php
-require_once('../private/initialize.php');
+require_once('../../private/initialize.php');
 $page_title = 'Sign Up';
 
 // Initialize variables
@@ -82,65 +82,69 @@ if(is_post_request()) {
 include(SHARED_PATH . '/header.php');
 ?>
 
-<div class="auth-container">
-    <h1>Create Account</h1>
-    
-    <?php echo display_errors($errors); ?>
-    <?php echo display_session_message(); ?>
-    
-    <form action="<?php echo url_for('/users/register.php'); ?>" method="POST" class="auth-form" id="registerForm">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="<?php echo h($username); ?>" 
-                   required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_-]+"
-                   title="Username can only contain letters, numbers, underscores, and hyphens">
-        </div>
+<link rel="stylesheet" href="<?php echo url_for('/css/auth.css'); ?>">
+
+<div class="auth-page">
+    <div class="auth-container">
+        <h1>Create Account</h1>
         
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo h($email); ?>" 
-                   required>
-        </div>
+        <?php echo display_errors($errors); ?>
+        <?php echo display_session_message(); ?>
         
-        <div class="form-group">
-            <label for="password">Password</label>
-            <div class="password-group">
-                <input type="password" id="password" name="password" required
-                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$">
-                <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                    <i class="fas fa-eye"></i>
-                </button>
+        <form action="<?php echo url_for('/users/register.php'); ?>" method="POST" class="auth-form" id="registerForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="<?php echo h($username); ?>" 
+                       required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_-]+"
+                       title="Username can only contain letters, numbers, underscores, and hyphens">
             </div>
-            <div class="password-strength-meter">
-                <div id="strengthMeter"></div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="<?php echo h($email); ?>" 
+                       required>
             </div>
-            <div class="password-requirements">
-                Password must contain:
-                <ul>
-                    <li id="length">At least 8 characters</li>
-                    <li id="uppercase">At least one uppercase letter</li>
-                    <li id="lowercase">At least one lowercase letter</li>
-                    <li id="number">At least one number</li>
-                    <li id="special">At least one special character</li>
-                </ul>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-group">
+                    <input type="password" id="password" name="password" required
+                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$">
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength-meter">
+                    <div id="strengthMeter"></div>
+                </div>
+                <div class="password-requirements">
+                    Password must contain:
+                    <ul>
+                        <li id="length">At least 8 characters</li>
+                        <li id="uppercase">At least one uppercase letter</li>
+                        <li id="lowercase">At least one lowercase letter</li>
+                        <li id="number">At least one number</li>
+                        <li id="special">At least one special character</li>
+                    </ul>
+                </div>
             </div>
-        </div>
+            
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <div class="password-group">
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <button type="submit" class="auth-button" id="registerButton" disabled>Create Account</button>
+        </form>
         
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password</label>
-            <div class="password-group">
-                <input type="password" id="confirm_password" name="confirm_password" required>
-                <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')">
-                    <i class="fas fa-eye"></i>
-                </button>
-            </div>
+        <div class="auth-links">
+            Already have an account? <a href="<?php echo url_for('/users/login.php'); ?>">Log In</a>
         </div>
-        
-        <button type="submit" class="auth-button" id="registerButton" disabled>Create Account</button>
-    </form>
-    
-    <div class="auth-links">
-        Already have an account? <a href="<?php echo url_for('/users/login.php'); ?>">Log In</a>
     </div>
 </div>
 

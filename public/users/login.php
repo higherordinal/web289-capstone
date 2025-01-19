@@ -1,5 +1,5 @@
 <?php
-require_once('../private/initialize.php');
+require_once('../../private/initialize.php');
 $page_title = 'Log In';
 
 // Redirect if already logged in
@@ -68,51 +68,55 @@ if(is_post_request()) {
 include(SHARED_PATH . '/header.php');
 ?>
 
-<div class="auth-container">
-    <h1>Welcome Back</h1>
-    
-    <?php echo display_errors($errors); ?>
-    <?php echo display_session_message(); ?>
-    
-    <form action="<?php echo url_for('/users/login.php'); ?>" method="POST" class="auth-form">
-        <div class="form-group">
-            <label for="username">Username or Email</label>
-            <input type="text" id="username" name="username" value="<?php echo h($username); ?>" 
-                   required autofocus>
-        </div>
+<link rel="stylesheet" href="<?php echo url_for('/css/auth.css'); ?>">
+
+<div class="auth-page">
+    <div class="auth-container">
+        <h1>Welcome Back</h1>
         
-        <div class="form-group">
-            <label for="password">Password</label>
-            <div class="password-group">
-                <input type="password" id="password" name="password" required>
-                <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                    <i class="fas fa-eye"></i>
-                </button>
+        <?php echo display_errors($errors); ?>
+        <?php echo display_session_message(); ?>
+        
+        <form action="<?php echo url_for('/users/login.php'); ?>" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input type="text" id="username" name="username" value="<?php echo h($username); ?>" 
+                       required autofocus>
             </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-group">
+                    <input type="password" id="password" name="password" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="remember" id="remember">
+                    Remember me
+                </label>
+            </div>
+            
+            <button type="submit" class="auth-button">Log In</button>
+        </form>
+        
+        <div class="auth-links">
+            <p><a href="<?php echo url_for('/users/forgot_password.php'); ?>">Forgot Password?</a></p>
+            <p>Don't have an account? <a href="<?php echo url_for('/users/register.php'); ?>">Sign Up</a></p>
         </div>
         
-        <div class="form-group">
-            <label class="checkbox-label">
-                <input type="checkbox" name="remember" id="remember">
-                Remember me
-            </label>
+        <div class="social-login">
+            <a href="<?php echo url_for('/auth/google'); ?>" class="social-button google-button">
+                <i class="fab fa-google"></i> Continue with Google
+            </a>
+            <a href="<?php echo url_for('/auth/facebook'); ?>" class="social-button facebook-button">
+                <i class="fab fa-facebook"></i> Continue with Facebook
+            </a>
         </div>
-        
-        <button type="submit" class="auth-button">Log In</button>
-    </form>
-    
-    <div class="auth-links">
-        <p><a href="<?php echo url_for('/users/forgot_password.php'); ?>">Forgot Password?</a></p>
-        <p>Don't have an account? <a href="<?php echo url_for('/users/register.php'); ?>">Sign Up</a></p>
-    </div>
-    
-    <div class="social-login">
-        <a href="<?php echo url_for('/auth/google'); ?>" class="social-button google-button">
-            <i class="fab fa-google"></i> Continue with Google
-        </a>
-        <a href="<?php echo url_for('/auth/facebook'); ?>" class="social-button facebook-button">
-            <i class="fab fa-facebook"></i> Continue with Facebook
-        </a>
     </div>
 </div>
 
