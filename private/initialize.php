@@ -42,7 +42,7 @@ spl_autoload_register('my_autoload');
 // Initialize database connection
 db_connect();
 
-// Create session object
+// Create session object - MUST be after autoload
 $session = new Session();
 
 // Development mode error reporting

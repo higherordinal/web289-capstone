@@ -2,6 +2,7 @@
 
 class Session {
     private $user_id;
+    private $username;
     private $is_admin;
     public $message;
     public $message_type;
@@ -19,8 +20,10 @@ class Session {
             // prevent session fixation attacks
             session_regenerate_id();
             $_SESSION['user_id'] = $user->id;
+            $_SESSION['username'] = $user->username;
             $_SESSION['is_admin'] = $user->is_admin;
             $this->user_id = $user->id;
+            $this->username = $user->username;
             $this->is_admin = $user->is_admin;
         }
         return true;
@@ -36,8 +39,10 @@ class Session {
 
     public function logout() {
         unset($_SESSION['user_id']);
+        unset($_SESSION['username']);
         unset($_SESSION['is_admin']);
         unset($this->user_id);
+        unset($this->username);
         unset($this->is_admin);
         return true;
     }
@@ -45,8 +50,13 @@ class Session {
     private function check_stored_login() {
         if(isset($_SESSION['user_id'])) {
             $this->user_id = $_SESSION['user_id'];
+            $this->username = $_SESSION['username'];
             $this->is_admin = $_SESSION['is_admin'];
         }
+    }
+
+    public function get_username() {
+        return $this->username ?? '';
     }
 
     public function message($msg="") {
@@ -81,3 +91,4 @@ class Session {
         }
     }
 }
+?>

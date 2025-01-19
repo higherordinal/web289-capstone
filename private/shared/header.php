@@ -33,6 +33,13 @@
     <?php endif; ?>
 </head>
 <body>
+<?php
+// Debug information
+if(!isset($session)) {
+    error_log("Session object not found in header.php");
+    $session = new Session();
+}
+?>
 <div class="main-content">
     <header class="site-header">
         <div class="container">
@@ -82,7 +89,7 @@
                         
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle">
-                                <i class="fas fa-user"></i> <?php echo h($session->username); ?> <i class="fas fa-caret-down"></i>
+                                <i class="fas fa-user"></i> <?php echo h($session->get_username()); ?> <i class="fas fa-caret-down"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="<?php echo url_for('/users/profile.php'); ?>">Profile</a></li>
@@ -90,12 +97,8 @@
                             </ul>
                         </li>
                     <?php } else { ?>
-                        <li class="nav-item">
-                            <a href="<?php echo url_for('/users/login.php'); ?>"><i class="fas fa-sign-in-alt"></i> Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?php echo url_for('/users/register.php'); ?>"><i class="fas fa-user-plus"></i> Register</a>
-                        </li>
+                        <li><a href="<?php echo url_for('/users/login.php'); ?>" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="<?php echo url_for('/users/register.php'); ?>" class="btn-secondary"><i class="fas fa-user-plus"></i> Register</a></li>
                     <?php } ?>
                 </ul>
             </nav>
