@@ -48,6 +48,11 @@ include(SHARED_PATH . '/header.php');
                 <td class="actions">
                     <a class="action" href="<?php echo url_for('/users/edit_user.php?id=' . h(u($user->id))); ?>">Edit</a>
                     <a class="action" href="<?php echo url_for('/users/view_user.php?id=' . h(u($user->id))); ?>">View</a>
+                    <a class="action <?php echo $user->is_active ? 'deactivate' : 'activate'; ?>" 
+                       href="<?php echo url_for('/users/toggle_status.php?id=' . h(u($user->id))); ?>"
+                       onclick="return confirm('Are you sure you want to <?php echo $user->is_active ? 'deactivate' : 'activate'; ?> this user?');">
+                        <?php echo $user->is_active ? 'Deactivate' : 'Activate'; ?>
+                    </a>
                     <a class="action delete" href="<?php echo url_for('/users/delete_user.php?id=' . h(u($user->id))); ?>">Delete</a>
                 </td>
             </tr>

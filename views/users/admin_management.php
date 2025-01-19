@@ -11,7 +11,7 @@ if(!$session->is_super_admin()) {
 $page_title = 'Admin Management';
 include(SHARED_PATH . '/header.php');
 
-// Get all admin users (excluding regular users)
+// Get all admin users (both admin and super admin)
 $admins = User::find_all_admins();
 ?>
 
@@ -50,7 +50,12 @@ $admins = User::find_all_admins();
                 <td class="actions">
                     <a class="action" href="<?php echo url_for('/users/edit_admin.php?id=' . h(u($admin->id))); ?>">Edit</a>
                     <?php if($session->is_super_admin() && $admin->user_level !== 's') { ?>
-                        <a class="action delete" href="<?php echo url_for('/users/delete_admin.php?id=' . h(u($admin->id))); ?>" onclick="return confirm('Are you sure you want to delete this admin?');">Delete</a>
+                        <a class="action <?php echo $admin->is_active ? 'deactivate' : 'activate'; ?>" 
+                           href="<?php echo url_for('/users/toggle_status.php?id=' . h(u($admin->id))); ?>"
+                           onclick="return confirm('Are you sure you want to <?php echo $admin->is_active ? 'deactivate' : 'activate'; ?> this admin?');">
+                            <?php echo $admin->is_active ? 'Deactivate' : 'Activate'; ?>
+                        </a>
+                        <a class="action delete" href="<?php echo url_for('/users/delete_admin.php?id=' . h(u($admin->id))); ?>">Delete</a>
                     <?php } ?>
                 </td>
             </tr>

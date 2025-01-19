@@ -76,6 +76,23 @@ a.action.delete:hover {
     background: #c0392b;
 }
 
+/* Status Toggle Buttons */
+.action.activate {
+    background: #27ae60;
+}
+
+.action.activate:hover {
+    background: #219a52;
+}
+
+.action.deactivate {
+    background: #e67e22;
+}
+
+.action.deactivate:hover {
+    background: #d35400;
+}
+
 /* Forms */
 .admin.edit, .admin.new, .admin.delete {
     max-width: 800px;
