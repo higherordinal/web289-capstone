@@ -72,11 +72,11 @@ class Recipe extends DatabaseObject {
     }
 
     public static function find_featured($limit=3) {
-        global $database;
+        $database = static::get_database();
         $sql = "SELECT * FROM " . static::$table_name;
         $sql .= " WHERE is_featured = TRUE";
         $sql .= " ORDER BY created_date DESC, created_time DESC";
-        $sql .= " LIMIT " . $database->escape_string($limit);
+        $sql .= " LIMIT " . $database->real_escape_string($limit);
         return static::find_by_sql($sql);
     }
 

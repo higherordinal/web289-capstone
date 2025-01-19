@@ -10,7 +10,8 @@ if (session_status() == PHP_SESSION_NONE) {
 define("PRIVATE_PATH", dirname(__FILE__));
 define("PROJECT_PATH", dirname(PRIVATE_PATH));
 define("PUBLIC_PATH", PROJECT_PATH . '/public');
-define("SHARED_PATH", PROJECT_PATH . '/views/shared');
+define("SHARED_PATH", PRIVATE_PATH . '/shared');
+define("TEMPLATES_PATH", PRIVATE_PATH . '/templates');
 
 // Assign the root URL to a PHP constant
 $public_end = strpos($_SERVER['SCRIPT_NAME'], '/public') + 7;
@@ -39,8 +40,7 @@ function my_autoload($class) {
 spl_autoload_register('my_autoload');
 
 // Initialize database connection
-$database = db_connect();
-DatabaseObject::set_database($database);
+db_connect();
 
 // Create session object
 $session = new Session();

@@ -29,23 +29,33 @@ function has_valid_password_format($password) {
 }
 
 function has_unique_username($username, $current_id="0") {
-    global $database;
+    $database = DatabaseObject::get_database();
     $sql = "SELECT * FROM user_account ";
-    $sql .= "WHERE username = '" . db_escape($database, $username) . "' ";
-    $sql .= "AND id != '" . db_escape($database, $current_id) . "'";
-    $result = mysqli_query($database, $sql);
-    $user_count = mysqli_num_rows($result);
-    mysqli_free_result($result);
+    $sql .= "WHERE username = '" . $database->real_escape_string($username) . "' ";
+    $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
+    $result = $database->query($sql);
+    if(!$result) {
+        // Query failed, log error and return false to indicate validation failure
+        error_log("Database error in has_unique_username: " . $database->error);
+        return false;
+    }
+    $user_count = $result->num_rows;
+    $result->free();
     return $user_count === 0;
 }
 
 function has_unique_email($email, $current_id="0") {
-    global $database;
+    $database = DatabaseObject::get_database();
     $sql = "SELECT * FROM user_account ";
-    $sql .= "WHERE email = '" . db_escape($database, $email) . "' ";
-    $sql .= "AND id != '" . db_escape($database, $current_id) . "'";
-    $result = mysqli_query($database, $sql);
-    $user_count = mysqli_num_rows($result);
-    mysqli_free_result($result);
+    $sql .= "WHERE email = '" . $database->real_escape_string($email) . "' ";
+    $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
+    $result = $database->query($sql);
+    if(!$result) {
+        // Query failed, log error and return false to indicate validation failure
+        error_log("Database error in has_unique_email: " . $database->error);
+        return false;
+    }
+    $user_count = $result->num_rows;
+    $result->free();
     return $user_count === 0;
 }

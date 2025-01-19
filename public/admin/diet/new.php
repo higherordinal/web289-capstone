@@ -22,35 +22,23 @@ $page_title = 'Create Diet Type';
 include(SHARED_PATH . '/header.php');
 ?>
 
-<link rel="stylesheet" href="<?php echo url_for('/css/admin.css'); ?>">
-
-<div class="admin new">
-    <h1>Create New Diet Type</h1>
-
-    <?php echo display_session_message(); ?>
-
-    <form action="<?php echo url_for('/admin/diet/new.php'); ?>" method="post">
-        <div class="form-group">
-            <label for="name">Diet Name</label>
-            <input type="text" name="diet[name]" id="name" value="<?php echo h($diet->name); ?>" required>
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1><?php echo h($page_title); ?></h1>
+            
+            <?php echo display_errors($diet->errors); ?>
+            
+            <form action="<?php echo url_for('/admin/diet/new.php'); ?>" method="post">
+                <?php include(TEMPLATES_PATH . '/admin/diet/form_fields.php'); ?>
+                
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">Create Diet Type</button>
+                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/recipe_metadata.php'); ?>">Cancel</a>
+                </div>
+            </form>
         </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea name="diet[description]" id="description" rows="3" required><?php echo h($diet->description); ?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="restrictions">Dietary Restrictions</label>
-            <textarea name="diet[restrictions]" id="restrictions" rows="3"><?php echo h($diet->restrictions); ?></textarea>
-            <small>List any specific ingredients or food groups that are not allowed in this diet.</small>
-        </div>
-
-        <div class="form-buttons">
-            <input type="submit" value="Create Diet">
-            <a class="cancel" href="<?php echo url_for('/admin/recipe_metadata.php'); ?>">Cancel</a>
-        </div>
-    </form>
+    </div>
 </div>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

@@ -12,6 +12,7 @@ class User extends DatabaseObject {
     public $is_active;
     protected $password;
     public $errors = [];
+    protected $password_required = true;
 
     public function __construct($args=[]) {
         $this->username = $args['username'] ?? '';
@@ -22,8 +23,9 @@ class User extends DatabaseObject {
     }
 
     public static function find_by_username($username) {
+        $database = static::get_database();
         $sql = "SELECT * FROM " . static::$table_name . " ";
-        $sql .= "WHERE username='" . self::$database->escape_string($username) . "'";
+        $sql .= "WHERE username='" . $database->real_escape_string($username) . "'";
         $obj_array = static::find_by_sql($sql);
         if(!empty($obj_array)) {
             return array_shift($obj_array);
@@ -33,8 +35,9 @@ class User extends DatabaseObject {
     }
 
     public static function find_by_email($email) {
+        $database = static::get_database();
         $sql = "SELECT * FROM " . static::$table_name . " ";
-        $sql .= "WHERE email='" . self::$database->escape_string($email) . "'";
+        $sql .= "WHERE email='" . $database->real_escape_string($email) . "'";
         $obj_array = static::find_by_sql($sql);
         if(!empty($obj_array)) {
             return array_shift($obj_array);
@@ -70,18 +73,30 @@ class User extends DatabaseObject {
             $this->errors[] = "Username cannot be blank.";
         } elseif (!has_length($this->username, array('min' => 3, 'max' => 50))) {
             $this->errors[] = "Username must be between 3 and 50 characters.";
-        } elseif (!has_unique_username($this->username, $this->user_id ?? 0)) {
-            $this->errors[] = "Username already exists. Try another.";
+        } else {
+            // Debug username validation
+            $unique_username = has_unique_username($this->username, $this->user_id ?? 0);
+            error_log("Checking username uniqueness for: " . $this->username);
+            error_log("Result: " . ($unique_username ? 'unique' : 'not unique'));
+            if (!$unique_username) {
+                $this->errors[] = "Username already exists. Try another.";
+            }
         }
 
         if(is_blank($this->email)) {
             $this->errors[] = "Email cannot be blank.";
         } elseif (!has_length($this->email, array('max' => 100))) {
             $this->errors[] = "Email must be less than 100 characters.";
-        } elseif (!has_valid_email_format($this->email)) {
+        } elseif (!is_valid_email($this->email)) {
             $this->errors[] = "Email must be a valid format.";
-        } elseif (!has_unique_email($this->email, $this->user_id ?? 0)) {
-            $this->errors[] = "Email already exists. Try another.";
+        } else {
+            // Debug email validation
+            $unique_email = has_unique_email($this->email, $this->user_id ?? 0);
+            error_log("Checking email uniqueness for: " . $this->email);
+            error_log("Result: " . ($unique_email ? 'unique' : 'not unique'));
+            if (!$unique_email) {
+                $this->errors[] = "Email already exists. Try another.";
+            }
         }
 
         if($this->password_required) {
@@ -111,6 +126,7 @@ class User extends DatabaseObject {
 
     // Find all admin users (both admin and super admin)
     public static function find_all_admins() {
+        $database = static::get_database();
         $sql = "SELECT * FROM " . static::$table_name . " ";
         $sql .= "WHERE user_level IN ('a', 's') ";
         $sql .= "ORDER BY username ASC";
@@ -119,6 +135,7 @@ class User extends DatabaseObject {
 
     // Find all regular users (not admins or super admins)
     public static function find_all_regular_users() {
+        $database = static::get_database();
         $sql = "SELECT * FROM " . static::$table_name . " ";
         $sql .= "WHERE user_level = 'u' ";
         $sql .= "ORDER BY username ASC";
@@ -127,7 +144,7 @@ class User extends DatabaseObject {
 
     // Count all users
     public static function count_all() {
-        global $database;
+        $database = static::get_database();
         $sql = "SELECT COUNT(*) as count FROM " . static::$table_name;
         $result = $database->query($sql);
         $row = $result->fetch_assoc();
@@ -136,8 +153,8 @@ class User extends DatabaseObject {
 
     // Count recipes by user
     public function count_recipes() {
-        global $database;
-        $sql = "SELECT COUNT(*) as count FROM recipe WHERE user_id = " . $database->escape_string($this->user_id);
+        $database = static::get_database();
+        $sql = "SELECT COUNT(*) as count FROM recipe WHERE user_id = " . $database->real_escape_string($this->user_id);
         $result = $database->query($sql);
         $row = $result->fetch_assoc();
         return $row['count'] ?? 0;
