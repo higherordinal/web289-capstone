@@ -18,13 +18,13 @@ $public_end = strpos($_SERVER['SCRIPT_NAME'], '/public') + 7;
 $doc_root = substr($_SERVER['SCRIPT_NAME'], 0, $public_end);
 define("WWW_ROOT", $doc_root);
 
-// Load helper functions
-require_once(PRIVATE_PATH . '/helpers/functions.php');
-require_once(PRIVATE_PATH . '/helpers/database_functions.php');
-require_once(PRIVATE_PATH . '/helpers/db_credentials.php');
-require_once(PRIVATE_PATH . '/helpers/validation_functions.php');
-require_once(PRIVATE_PATH . '/helpers/status_error_functions.php');
-require_once(PRIVATE_PATH . '/helpers/auth.php');
+// Load core functions
+require_once(PRIVATE_PATH . '/core/functions.php');
+require_once(PRIVATE_PATH . '/core/database_functions.php');
+require_once(PRIVATE_PATH . '/core/db_credentials.php');
+require_once(PRIVATE_PATH . '/core/validation_functions.php');
+require_once(PRIVATE_PATH . '/core/status_error_functions.php');
+require_once(PRIVATE_PATH . '/core/auth.php');
 
 // Autoload class definitions
 function my_autoload($class) {
