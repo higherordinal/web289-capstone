@@ -90,15 +90,15 @@
                             </ul>
                         </li>
                     <?php } else { ?>
-                        <li><a href="<?php echo url_for('/users/login.php'); ?>"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                        <li><a href="<?php echo url_for('/users/register.php'); ?>"><i class="fas fa-user-plus"></i> Register</a></li>
+                        <li class="nav-item">
+                            <a href="<?php echo url_for('/users/login.php'); ?>"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo url_for('/users/register.php'); ?>"><i class="fas fa-user-plus"></i> Register</a>
+                        </li>
                     <?php } ?>
                 </ul>
             </nav>
-            
-            <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
     </header>
     
