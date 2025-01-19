@@ -10,6 +10,11 @@ $total_recipes = Recipe::count_all();
 $total_users = User::count_all();
 $total_reviews = Review::count_all();
 
+// Get categories
+$styles = RecipeAttribute::get_all(RecipeAttribute::TYPE_STYLE);
+$diets = RecipeAttribute::get_all(RecipeAttribute::TYPE_DIET);
+$types = RecipeAttribute::get_all(RecipeAttribute::TYPE_TYPE);
+
 include(SHARED_PATH . '/header.php');
 ?>
 
@@ -29,12 +34,84 @@ include(SHARED_PATH . '/header.php');
     </div>
 </section>
 
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="category-group">
+        <h2>Cuisine Styles</h2>
+        <div class="category-grid">
+            <?php foreach($styles as $style) { 
+                $image_name = strtolower(str_replace(' ', '-', $style->name));
+                $image_path = '/images/cuisines/' . $image_name . '.jpg';
+                $placeholder_path = '/images/cuisine-placeholder.jpg';
+                $final_path = file_exists(PUBLIC_PATH . $image_path) ? $image_path : $placeholder_path;
+            ?>
+                <a href="<?php echo url_for('/recipes/index.php?style_id=' . h(u($style->id))); ?>" 
+                   class="category-item">
+                    <div class="category-image">
+                        <img src="<?php echo url_for($final_path); ?>" 
+                             alt="<?php echo h($style->name); ?> Cuisine">
+                        <div class="category-overlay">
+                            <span class="category-name"><?php echo h($style->name); ?></span>
+                        </div>
+                    </div>
+                </a>
+            <?php } ?>
+        </div>
+    </div>
+
+    <div class="category-group">
+        <h2>Dietary Preferences</h2>
+        <div class="category-grid">
+            <?php foreach($diets as $diet) { 
+                $image_name = strtolower(str_replace(' ', '-', $diet->name));
+                $image_path = '/images/diets/' . $image_name . '.jpg';
+                $placeholder_path = '/images/diet-placeholder.jpg';
+                $final_path = file_exists(PUBLIC_PATH . $image_path) ? $image_path : $placeholder_path;
+            ?>
+                <a href="<?php echo url_for('/recipes/index.php?diet_id=' . h(u($diet->id))); ?>" 
+                   class="category-item">
+                    <div class="category-image">
+                        <img src="<?php echo url_for($final_path); ?>" 
+                             alt="<?php echo h($diet->name); ?> Diet">
+                        <div class="category-overlay">
+                            <span class="category-name"><?php echo h($diet->name); ?></span>
+                        </div>
+                    </div>
+                </a>
+            <?php } ?>
+        </div>
+    </div>
+
+    <div class="category-group">
+        <h2>Meal Types</h2>
+        <div class="category-grid">
+            <?php foreach($types as $type) { 
+                $image_name = strtolower(str_replace(' ', '-', $type->name));
+                $image_path = '/images/types/' . $image_name . '.jpg';
+                $placeholder_path = '/images/type-placeholder.jpg';
+                $final_path = file_exists(PUBLIC_PATH . $image_path) ? $image_path : $placeholder_path;
+            ?>
+                <a href="<?php echo url_for('/recipes/index.php?type_id=' . h(u($type->id))); ?>" 
+                   class="category-item">
+                    <div class="category-image">
+                        <img src="<?php echo url_for($final_path); ?>" 
+                             alt="<?php echo h($type->name); ?> Type">
+                        <div class="category-overlay">
+                            <span class="category-name"><?php echo h($type->name); ?></span>
+                        </div>
+                    </div>
+                </a>
+            <?php } ?>
+        </div>
+    </div>
+</section>
+
 <!-- Featured Recipes Section -->
 <section class="featured-section">
     <h2>Featured Recipes</h2>
     <div class="featured-grid">
         <?php foreach($featured_recipes as $recipe) { ?>
-            <article class="featured-card">
+            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" class="featured-card">
                 <div class="card-image">
                     <img src="<?php echo url_for($recipe->image_path()); ?>" 
                          alt="<?php echo h($recipe->title); ?>">
@@ -46,34 +123,6 @@ include(SHARED_PATH . '/header.php');
                         <span>By <?php echo h($recipe->author()->username); ?></span>
                         <span><?php echo h($recipe->rating_average()); ?> ★</span>
                     </div>
-                </div>
-            </article>
-        <?php } ?>
-    </div>
-</section>
-
-<!-- Categories Section -->
-<section class="categories-section">
-    <h2>Popular Categories</h2>
-    <div class="category-grid">
-        <?php
-        $categories = [
-            'Breakfast' => 'breakfast.jpg',
-            'Main Course' => 'main-course.jpg',
-            'Desserts' => 'desserts.jpg',
-            'Vegetarian' => 'vegetarian.jpg',
-            'Quick & Easy' => 'quick-easy.jpg',
-            'Healthy' => 'healthy.jpg'
-        ];
-        
-        foreach($categories as $name => $image) {
-        ?>
-            <a href="<?php echo url_for('/recipes/index.php?category=' . u($name)); ?>" 
-               class="category-card">
-                <img src="<?php echo url_for('/images/categories/' . $image); ?>" 
-                     alt="<?php echo h($name); ?>">
-                <div class="category-overlay">
-                    <?php echo h($name); ?>
                 </div>
             </a>
         <?php } ?>
