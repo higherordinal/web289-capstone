@@ -21,7 +21,8 @@
     <link rel="stylesheet" href="<?php echo url_for('/css/components/header.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/css/components/footer.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/css/components/forms.css'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/css/components/auth.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/css/pages/auth.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/css/pages/recipe-gallery.css'); ?>">
     
     <!-- Page-Specific Styles -->
     <?php if(isset($page_style)): ?>
@@ -83,3 +84,11 @@ error_log("SESSION: " . print_r($_SESSION, true));
     <main>
         <div class="container">
             <?php echo display_session_message(); ?>
+            
+            <?php if(isset($page_style)) { ?>
+                <?php if($page_style === 'recipe-gallery') { ?>
+                    <script src="<?php echo url_for('/scripts/recipe-favorites.js'); ?>" defer></script>
+                <?php } else { ?>
+                    <script src="<?php echo url_for('/scripts/' . $page_style . '.js'); ?>" defer></script>
+                <?php } ?>
+            <?php } ?>

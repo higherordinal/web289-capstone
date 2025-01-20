@@ -77,6 +77,10 @@ class Session {
         return $this->username ?? '';
     }
 
+    public function get_user_id() {
+        return $this->user_id ?? '';
+    }
+
     public function message($msg="") {
         if(!empty($msg)) {
             // Set message
@@ -105,7 +109,14 @@ class Session {
             $this->message = $_SESSION['message'];
             unset($_SESSION['message']);
         } else {
-            $this->message = "";
+            $this->message = '';
+        }
+
+        if(isset($_SESSION['message_type'])) {
+            $this->message_type = $_SESSION['message_type'];
+            unset($_SESSION['message_type']);
+        } else {
+            $this->message_type = '';
         }
     }
 }

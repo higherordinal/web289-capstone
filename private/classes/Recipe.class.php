@@ -286,6 +286,11 @@ class Recipe extends DatabaseObject {
         return $recipes;
     }
 
+    public function is_favorited_by($user_id) {
+        if (!$user_id) return false;
+        return UserFavorite::is_favorite($user_id, $this->recipe_id);
+    }
+
     public static function find_by_sql($sql) {
         $database = static::get_database();
         $result = mysqli_query($database, $sql);

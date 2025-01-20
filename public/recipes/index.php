@@ -172,58 +172,71 @@ function build_query_string($params_to_update=[]) {
                 $type = $recipe->type();
             ?>
                 <article class="recipe-card">
-                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>">
-                        <div class="recipe-image">
-                            <img src="<?php echo url_for($recipe->image_path()); ?>" 
-                                 alt="<?php echo h($recipe->title); ?>"
-                                 loading="lazy">
-                        </div>
-                        <div class="recipe-content">
-                            <h2><?php echo h($recipe->title); ?></h2>
-                            <p class="recipe-description"><?php echo h(substr($recipe->description, 0, 100)) . '...'; ?></p>
-                            <div class="recipe-meta">
-                                <?php if($style) { ?>
-                                    <div class="recipe-style">
-                                        <i class="fas fa-utensils"></i><?php echo h($style->name); ?>
-                                    </div>
-                                <?php } ?>
-                                <?php if($diet) { ?>
-                                    <div class="recipe-diet">
-                                        <i class="fas fa-leaf"></i><?php echo h($diet->name); ?>
-                                    </div>
-                                <?php } ?>
-                                <?php if($type) { ?>
-                                    <div class="recipe-type">
-                                        <i class="fas fa-tag"></i><?php echo h($type->name); ?>
-                                    </div>
-                                <?php } ?>
+                    <div class="recipe-content">
+                        <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>">
+                            <div class="recipe-image">
+                                <img src="<?php echo url_for($recipe->image_path()); ?>" 
+                                     alt="<?php echo h($recipe->title); ?>"
+                                     loading="lazy">
                             </div>
-                            <div class="recipe-rating">
-                                <?php 
-                                $rating = property_exists($recipe, 'rating') ? (float)$recipe->rating : 0;
-                                for($i = 1; $i <= 5; $i++) { 
-                                ?>
-                                    <i class="fas fa-star <?php echo ($i <= round($rating)) ? 'active' : ''; ?>"></i>
-                                <?php } ?>
+                            <div class="recipe-details">
+                                <h2><?php echo h($recipe->title); ?></h2>
+                                <p class="recipe-description"><?php echo h(substr($recipe->description, 0, 100)) . '...'; ?></p>
+                                <div class="recipe-meta">
+                                    <?php if($style) { ?>
+                                        <div class="recipe-style">
+                                            <i class="fas fa-utensils"></i><?php echo h($style->name); ?>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if($diet) { ?>
+                                        <div class="recipe-diet">
+                                            <i class="fas fa-leaf"></i><?php echo h($diet->name); ?>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if($type) { ?>
+                                        <div class="recipe-type">
+                                            <i class="fas fa-tag"></i><?php echo h($type->name); ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                                <div class="recipe-rating">
+                                    <?php 
+                                    $rating = property_exists($recipe, 'rating') ? (float)$recipe->rating : 0;
+                                    for($i = 1; $i <= 5; $i++) { 
+                                    ?>
+                                        <i class="fas fa-star <?php echo ($i <= round($rating)) ? 'active' : ''; ?>"></i>
+                                    <?php } ?>
+                                </div>
+                                <div class="recipe-time">
+                                    <i class="fas fa-clock"></i>
+                                    <?php 
+                                    $total_minutes = ($recipe->prep_hours * 60 + $recipe->prep_minutes) + 
+                                                   ($recipe->cook_hours * 60 + $recipe->cook_minutes);
+                                    $hours = floor($total_minutes / 60);
+                                    $minutes = $total_minutes % 60;
+                                    
+                                    if ($hours > 0) {
+                                        echo h($hours) . 'h ';
+                                    }
+                                    if ($minutes > 0 || $hours == 0) {
+                                        echo h($minutes) . 'm';
+                                    }
+                                    ?>
+                                </div>
                             </div>
-                            <div class="recipe-time">
-                                <i class="fas fa-clock"></i>
-                                <?php 
-                                $total_minutes = ($recipe->prep_hours * 60 + $recipe->prep_minutes) + 
-                                               ($recipe->cook_hours * 60 + $recipe->cook_minutes);
-                                $hours = floor($total_minutes / 60);
-                                $minutes = $total_minutes % 60;
-                                
-                                if ($hours > 0) {
-                                    echo h($hours) . 'h ';
-                                }
-                                if ($minutes > 0 || $hours == 0) {
-                                    echo h($minutes) . 'm';
-                                }
-                                ?>
+                        </a>
+                        <?php if($session->is_logged_in()) { 
+                            $is_favorited = $recipe->is_favorited_by($session->get_user_id());
+                        ?>
+                            <div class="favorite-button-container">
+                                <button class="favorite-button <?php echo $is_favorited ? 'favorited' : ''; ?>"
+                                        data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
+                                        title="<?php echo $is_favorited ? 'Remove from favorites' : 'Add to favorites'; ?>">
+                                    <i class="fas fa-heart"></i>
+                                </button>
                             </div>
-                        </div>
-                    </a>
+                        <?php } ?>
+                    </div>
                 </article>
             <?php } ?>
         </div>

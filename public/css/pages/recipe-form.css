@@ -1,0 +1,145 @@
+.recipe-form {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+.recipe-form h1 {
+    color: var(--color-black);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-family: var(--font-heading);
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 1rem;
+}
+
+.recipe-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.recipe-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-gray-800);
+    font-weight: 600;
+}
+
+.recipe-form .form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+}
+
+.recipe-form .form-control:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background-color: var(--color-white);
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.15);
+}
+
+.recipe-form textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.recipe-form select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+.recipe-form h4 {
+    color: var(--color-gray-800);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-left: 3px solid var(--color-primary);
+    padding-left: 0.75rem;
+}
+
+.recipe-form .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.recipe-form .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: 0 2px 4px rgba(230, 126, 34, 0.2);
+}
+
+.recipe-form .btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(230, 126, 34, 0.3);
+}
+
+.recipe-form .btn-secondary {
+    background-color: var(--color-gray-700);
+    color: var(--color-white);
+    margin-left: 1rem;
+}
+
+.recipe-form .btn-secondary:hover {
+    background-color: var(--color-gray-800);
+    transform: translateY(-1px);
+}
+
+.recipe-form .img-thumbnail {
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem;
+}
+
+/* Grid layout adjustments */
+.recipe-form .row {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: var(--color-gray-100);
+    border-radius: var(--radius-md);
+}
+
+@media (min-width: 768px) {
+    .recipe-form .row {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+/* Error states */
+.recipe-form .form-control.is-invalid {
+    border-color: var(--color-error);
+    background-color: rgba(231, 76, 60, 0.05);
+}
+
+.recipe-form .invalid-feedback {
+    color: var(--color-error);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.recipe-form .invalid-feedback::before {
+    content: "⚠";
+    margin-right: 0.5rem;
+}
