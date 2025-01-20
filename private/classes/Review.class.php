@@ -2,6 +2,7 @@
 
 class Review extends DatabaseObject {
     static protected $table_name = "recipe_rating";
+    static protected $primary_key = "rating_id";
     static protected $db_columns = ['rating_id', 'recipe_id', 'user_id', 'rating_value', 'comment_text', 'created_date', 'created_time'];
 
     public $rating_id;
@@ -21,6 +22,15 @@ class Review extends DatabaseObject {
         $this->comment_text = $args['comment_text'] ?? '';
         $this->created_date = $args['created_date'] ?? date('Y-m-d');
         $this->created_time = $args['created_time'] ?? date('H:i:s');
+    }
+
+    public function attributes() {
+        $attributes = [];
+        foreach(static::$db_columns as $column) {
+            if($column == 'rating_id') { continue; }
+            $attributes[$column] = $this->$column;
+        }
+        return $attributes;
     }
 
     public function save() {

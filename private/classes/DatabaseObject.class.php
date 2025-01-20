@@ -92,7 +92,11 @@ abstract class DatabaseObject {
         $database = static::get_database();
         $result = mysqli_query($database, $sql);
         if($result) {
-            $this->id = mysqli_insert_id($database);
+            $insert_id = mysqli_insert_id($database);
+            $pk = static::get_primary_key();
+            if($pk && $insert_id) {
+                $this->$pk = $insert_id;
+            }
             return true;
         } else {
             return false;
@@ -111,7 +115,8 @@ abstract class DatabaseObject {
 
         $sql = "UPDATE " . static::$table_name . " SET ";
         $sql .= join(', ', $attribute_pairs);
-        $sql .= " WHERE id='" . db_escape(static::get_database(), $this->id) . "' ";
+        $pk = static::get_primary_key();
+        $sql .= " WHERE " . $pk . "='" . db_escape(static::get_database(), $this->$pk) . "' ";
         $sql .= "LIMIT 1";
 
         $database = static::get_database();
@@ -155,7 +160,7 @@ abstract class DatabaseObject {
 
     public function delete() {
         $sql = "DELETE FROM " . static::$table_name . " ";
-        $sql .= "WHERE id='" . db_escape(static::get_database(), $this->id) . "' ";
+        $sql .= "WHERE " . static::get_primary_key() . "='" . db_escape(static::get_database(), $this->id) . "' ";
         $sql .= "LIMIT 1";
 
         $database = static::get_database();
