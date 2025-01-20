@@ -2,7 +2,7 @@
 
 class Review extends DatabaseObject {
     static protected $table_name = "recipe_rating";
-    static protected $db_columns = ['rating_id', 'recipe_id', 'user_id', 'rating_value'];
+    static protected $db_columns = ['rating_id', 'recipe_id', 'user_id', 'rating_value', 'comment_text', 'created_date', 'created_time'];
 
     public $rating_id;
     public $recipe_id;
@@ -53,15 +53,10 @@ class Review extends DatabaseObject {
     }
 
     public function user() {
-        if(isset($this->username)) {
-            // If username is already loaded from the JOIN
-            $user = new User();
-            $user->username = $this->username;
-            return $user;
-        } else {
-            // Otherwise load the full user
+        if($this->user_id) {
             return User::find_by_id($this->user_id);
         }
+        return null;
     }
 
     protected function validate() {
@@ -74,8 +69,9 @@ class Review extends DatabaseObject {
             $this->errors[] = "User ID cannot be blank.";
         }
         if(is_blank($this->rating_value)) {
-            $this->errors[] = "Rating cannot be blank.";
-        } elseif(!is_numeric($this->rating_value) || $this->rating_value < 1 || $this->rating_value > 5) {
+            $this->errors[] = "Rating value cannot be blank.";
+        }
+        if(!is_blank($this->rating_value) && !has_number_between($this->rating_value, 1, 5)) {
             $this->errors[] = "Rating must be between 1 and 5.";
         }
 

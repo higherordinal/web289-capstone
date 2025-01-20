@@ -1,0 +1,319 @@
+.recipe-ingredients {
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.ingredients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-gray-200);
+}
+
+.ingredients-header h2 {
+    margin: 0;
+    color: var(--color-gray-900);
+    font-family: var(--font-heading);
+}
+
+.scaling-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.scale-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--color-primary);
+    background: none;
+    color: var(--color-primary);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.scale-btn:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-dark);
+}
+
+.scale-btn.active {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ingredients-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-gray-200);
+    color: var(--color-gray-800);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.ingredients-list li:last-child {
+    border-bottom: none;
+}
+
+.ingredients-list .amount {
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-right: 0.5rem;
+    min-width: 2.5rem;
+    display: inline-block;
+}
+
+/* Directions Section */
+.recipe-directions {
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.recipe-directions h2 {
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-gray-200);
+    color: var(--color-gray-900);
+    font-family: var(--font-heading);
+}
+
+.directions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: step-counter;
+}
+
+.direction-step {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.directions-list li:last-child .direction-step {
+    border-bottom: none;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.step-content {
+    flex-grow: 1;
+}
+
+.step-content p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--color-gray-800);
+    line-height: 1.6;
+}
+
+.step-note {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background-color: var(--color-gray-100);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--color-gray-700);
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+/* Comments Section */
+.comments-section {
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-gray-200);
+}
+
+.comments-header h2 {
+    margin: 0;
+    color: var(--color-gray-900);
+    font-family: var(--font-heading);
+}
+
+.average-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-gray-700);
+    font-weight: 600;
+}
+
+.stars .fa-star {
+    color: var(--color-gray-300);
+    margin: 0 0.1rem;
+}
+
+.stars .fa-star.filled {
+    color: var(--color-warning);
+}
+
+.comment-form {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: var(--color-gray-100);
+    border-radius: var(--radius-md);
+}
+
+.comment-form h3 {
+    margin: 0 0 1rem 0;
+    color: var(--color-gray-800);
+    font-size: 1.1rem;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1.5rem;
+    color: var(--color-gray-300);
+    cursor: pointer;
+    padding: 0 0.1rem;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: var(--color-warning);
+}
+
+.comment-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    resize: vertical;
+}
+
+.submit-comment {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-comment:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+}
+
+.login-prompt {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--color-gray-100);
+    border-radius: var(--radius-md);
+    color: var(--color-gray-700);
+}
+
+.login-prompt a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+.comments-list {
+    margin-top: 2rem;
+}
+
+.comment {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: var(--color-gray-700);
+    font-size: 0.9rem;
+}
+
+.comment-author {
+    font-weight: 600;
+}
+
+.comment-author i,
+.comment-date i {
+    margin-right: 0.25rem;
+}
+
+.comment-rating {
+    margin-bottom: 0.5rem;
+}
+
+.comment-rating .star {
+    color: var(--color-gray-300);
+    font-size: 1.1rem;
+}
+
+.comment-rating .star.filled {
+    color: var(--color-warning);
+}
+
+.comment-text {
+    color: var(--color-gray-800);
+    line-height: 1.5;
+}

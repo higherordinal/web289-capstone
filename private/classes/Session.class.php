@@ -48,6 +48,10 @@ class Session {
         return isset($this->is_admin) && $this->is_admin === true;
     }
 
+    public function get_user_id() {
+        return $this->user_id ?? null;
+    }
+
     public function logout() {
         unset($_SESSION['user_id']);
         unset($_SESSION['username']);
@@ -75,10 +79,6 @@ class Session {
 
     public function get_username() {
         return $this->username ?? '';
-    }
-
-    public function get_user_id() {
-        return $this->user_id ?? '';
     }
 
     public function message($msg="") {

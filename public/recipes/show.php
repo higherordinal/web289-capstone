@@ -12,7 +12,7 @@ if(!$recipe) {
 if(is_post_request() && $session->is_logged_in()) {
     $args = [];
     $args['recipe_id'] = $recipe->recipe_id;
-    $args['user_id'] = $session->user_id;
+    $args['user_id'] = $session->get_user_id();
     $args['rating_value'] = $_POST['review']['rating'] ?? '';
     $args['comment_text'] = $_POST['review']['comment'] ?? '';
     
@@ -76,6 +76,74 @@ include(SHARED_PATH . '/header.php');
 
     <div class="recipe-description">
         <?php echo h($recipe->description); ?>
+    </div>
+
+    <div class="recipe-ingredients">
+        <div class="ingredients-header">
+            <h2>Ingredients</h2>
+            <div class="scaling-buttons">
+                <button class="scale-btn" data-scale="0.5">½×</button>
+                <button class="scale-btn active" data-scale="1">1×</button>
+                <button class="scale-btn" data-scale="2">2×</button>
+                <button class="scale-btn" data-scale="3">3×</button>
+            </div>
+        </div>
+        <ul class="ingredients-list">
+            <li><span class="amount" data-base="2">2</span> cups all-purpose flour</li>
+            <li><span class="amount" data-base="1">1</span> cup milk</li>
+            <li><span class="amount" data-base="0.5">½</span> cup sugar</li>
+            <li><span class="amount" data-base="2">2</span> large eggs</li>
+            <li><span class="amount" data-base="1.5">1½</span> teaspoons baking powder</li>
+        </ul>
+    </div>
+
+    <div class="recipe-directions">
+        <h2>Directions</h2>
+        <ol class="directions-list">
+            <li>
+                <div class="direction-step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <p>In a large bowl, whisk together flour and baking powder.</p>
+                        <div class="step-note">Make sure to sift the flour to avoid lumps.</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="direction-step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <p>In a separate bowl, beat eggs and sugar until light and fluffy.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="direction-step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <p>Gradually add milk to the egg mixture while continuing to beat.</p>
+                        <div class="step-note">The mixture should be smooth and well combined.</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="direction-step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <p>Fold the dry ingredients into the wet ingredients until just combined. Do not overmix.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="direction-step">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <p>Pour the batter into a prepared pan and bake at 350°F for 25-30 minutes.</p>
+                        <div class="step-note">Test with a toothpick - it should come out clean when done.</div>
+                    </div>
+                </div>
+            </li>
+        </ol>
     </div>
 
     <?php if($recipe->video_url) { ?>
@@ -181,7 +249,7 @@ include(SHARED_PATH . '/header.php');
                         <?php } ?>
                     </div>
                     <?php if($review->comment_text) { ?>
-                        <div class="comment-content">
+                        <div class="comment-text">
                             <?php echo h($review->comment_text); ?>
                         </div>
                     <?php } ?>
@@ -191,4 +259,6 @@ include(SHARED_PATH . '/header.php');
     </div>
 </div>
 
+<script src="<?php echo url_for('/scripts/recipe-scale.js'); ?>"></script>
+<script src="<?php echo url_for('/scripts/recipe-show.js'); ?>"></script>
 <?php include(SHARED_PATH . '/footer.php'); ?>
