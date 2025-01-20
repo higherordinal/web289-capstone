@@ -245,8 +245,12 @@ class Recipe extends DatabaseObject {
         
         $sql .= " LIMIT {$per_page} OFFSET {$offset}";
         
+        // Debug the SQL query
+        error_log("Recipe query SQL: " . $sql);
+        
         // Get the base recipe data
         $recipes = static::find_by_sql($sql);
+        error_log("Found " . count($recipes) . " recipes");
         
         // Now get ratings for each recipe
         if (!empty($recipes)) {

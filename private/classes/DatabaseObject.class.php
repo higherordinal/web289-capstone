@@ -8,10 +8,15 @@ abstract class DatabaseObject {
 
     public static function set_database($database) {
         self::$database = $database;
+        error_log("Database connection set: " . (self::$database ? "true" : "false"));
+        if (self::$database) {
+            error_log("Connected to database: " . self::$database->host_info);
+        }
     }
 
     public static function get_database() {
-        if(!isset(self::$database)) {
+        if (!isset(self::$database)) {
+            error_log("Warning: Database connection not set!");
             throw new Exception("Database connection not set. Call set_database() first.");
         }
         return self::$database;
@@ -47,8 +52,9 @@ abstract class DatabaseObject {
     }
 
     public static function find_by_id($id) {
+        $database = static::get_database();
         $sql = "SELECT * FROM " . static::$table_name . " ";
-        $sql .= "WHERE " . static::get_primary_key() . "='" . db_escape(static::get_database(), $id) . "'";
+        $sql .= "WHERE " . static::get_primary_key() . "='" . db_escape($database, $id) . "'";
         $obj_array = static::find_by_sql($sql);
         if(!empty($obj_array)) {
             return array_shift($obj_array);
@@ -105,7 +111,7 @@ abstract class DatabaseObject {
 
         $sql = "UPDATE " . static::$table_name . " SET ";
         $sql .= join(', ', $attribute_pairs);
-        $sql .= " WHERE " . static::get_primary_key() . "='" . db_escape(static::get_database(), $this->{static::get_primary_key()}) . "' ";
+        $sql .= " WHERE id='" . db_escape(static::get_database(), $this->id) . "' ";
         $sql .= "LIMIT 1";
 
         $database = static::get_database();
@@ -114,7 +120,7 @@ abstract class DatabaseObject {
     }
 
     public function save() {
-        if(isset($this->{static::get_primary_key()})) {
+        if(isset($this->id)) {
             return $this->update();
         } else {
             return $this->create();
@@ -149,7 +155,7 @@ abstract class DatabaseObject {
 
     public function delete() {
         $sql = "DELETE FROM " . static::$table_name . " ";
-        $sql .= "WHERE " . static::get_primary_key() . "='" . db_escape(static::get_database(), $this->{static::get_primary_key()}) . "' ";
+        $sql .= "WHERE id='" . db_escape(static::get_database(), $this->id) . "' ";
         $sql .= "LIMIT 1";
 
         $database = static::get_database();
@@ -158,10 +164,6 @@ abstract class DatabaseObject {
     }
 
     protected static function get_primary_key() {
-        if(isset(static::$primary_key)) {
-            return static::$primary_key;
-        }
-        // Default to table_name + _id
-        return static::$table_name . '_id';
+        return isset(static::$primary_key) ? static::$primary_key : 'id';
     }
 }

@@ -16,4 +16,17 @@ function confirm_db_connect($connection) {
   }
 }
 
+function db_escape($connection, $string) {
+  if (!$connection instanceof mysqli) {
+    // If connection is not a mysqli object, try to get the global connection
+    global $database;
+    if ($database instanceof mysqli) {
+      $connection = $database;
+    } else {
+      // If no valid connection is found, return the string with basic escaping
+      return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+    }
+  }
+  return mysqli_real_escape_string($connection, $string);
+}
 ?>

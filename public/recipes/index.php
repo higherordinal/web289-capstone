@@ -14,6 +14,15 @@ $type_id = !empty($_GET['type']) ? (int)$_GET['type'] : null;
 $sort = $_GET['sort'] ?? 'newest';
 $per_page = 25;
 
+// Debug information
+error_log("Recipe Gallery Debug:");
+error_log("Current Page: " . $current_page);
+error_log("Search: " . $search);
+error_log("Style ID: " . ($style_id ?? 'null'));
+error_log("Diet ID: " . ($diet_id ?? 'null'));
+error_log("Type ID: " . ($type_id ?? 'null'));
+error_log("Sort: " . $sort);
+
 // Get filter options
 $styles = RecipeAttribute::get_all(RecipeAttribute::TYPE_STYLE);
 $diets = RecipeAttribute::get_all(RecipeAttribute::TYPE_DIET);
@@ -24,6 +33,8 @@ $offset = ($current_page - 1) * $per_page;
 
 // Get total filtered recipes for pagination
 $total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id);
+error_log("Total Recipes Found: " . $total_recipes);
+
 $total_pages = ceil($total_recipes / $per_page);
 
 // Ensure current page is within valid range
@@ -36,6 +47,11 @@ if ($current_page > $total_pages && $total_pages > 0) {
 
 // Get filtered and sorted recipes
 $recipes = Recipe::find_by_page_with_relations($per_page, $offset, $search, $style_id, $diet_id, $type_id, $sort);
+error_log("Recipes Retrieved: " . count($recipes));
+
+if (empty($recipes)) {
+    error_log("No recipes found. Last SQL Error: " . mysqli_error(Recipe::get_database()));
+}
 
 // Helper function to maintain query parameters
 function build_query_string($params_to_update=[]) {

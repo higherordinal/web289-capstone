@@ -42,7 +42,7 @@ if(is_post_request()) {
                     $user->save();
                     
                     setcookie('remember_token', $token, $expiry, '/', '', true, true);
-                    setcookie('remember_user', $user->id, $expiry, '/', '', true, true);
+                    setcookie('remember_user', $user->user_id, $expiry, '/', '', true, true);
                 }
                 
                 // Log the user in

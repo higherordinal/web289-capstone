@@ -39,6 +39,11 @@ if(!isset($session)) {
     error_log("Session object not found in header.php");
     $session = new Session();
 }
+
+// Debug session state
+error_log("Session state in header.php:");
+error_log("is_logged_in: " . ($session->is_logged_in() ? "true" : "false"));
+error_log("SESSION: " . print_r($_SESSION, true));
 ?>
 <div class="main-content">
     <header class="site-header">
@@ -62,43 +67,11 @@ if(!isset($session)) {
                     <li><a href="<?php echo url_for('/recipes'); ?>"><i class="fas fa-utensils"></i> Recipes</a></li>
                     
                     <?php if($session->is_logged_in()) { ?>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle">
-                                <i class="fas fa-book"></i> My Recipes <i class="fas fa-caret-down"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<?php echo url_for('/recipes/new.php'); ?>">Add Recipe</a></li>
-                                <li><a href="<?php echo url_for('/recipes/my_recipes.php'); ?>">My Recipes</a></li>
-                                <?php if($session->is_admin()) { ?>
-                                    <li><a href="<?php echo url_for('/admin/recipes/index.php'); ?>">Manage Recipes</a></li>
-                                <?php } ?>
-                            </ul>
-                        </li>
-                        
-                        <?php if($session->is_admin()) { ?>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle">
-                                    <i class="fas fa-cog"></i> Admin <i class="fas fa-caret-down"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?php echo url_for('/admin/users/index.php'); ?>">Manage Users</a></li>
-                                    <li><a href="<?php echo url_for('/admin/recipe_attributes/index.php'); ?>">Recipe Attributes</a></li>
-                                </ul>
-                            </li>
-                        <?php } ?>
-                        
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle">
-                                <i class="fas fa-user"></i> <?php echo h($session->get_username()); ?> <i class="fas fa-caret-down"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<?php echo url_for('/users/profile.php'); ?>">Profile</a></li>
-                                <li><a href="<?php echo url_for('/users/logout.php'); ?>">Logout</a></li>
-                            </ul>
-                        </li>
+                        <li><a href="<?php echo url_for('/users/profile.php'); ?>"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="<?php echo url_for('/users/logout.php'); ?>"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     <?php } else { ?>
-                        <li><a href="<?php echo url_for('/users/login.php'); ?>" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                        <li><a href="<?php echo url_for('/users/register.php'); ?>" class="btn-secondary"><i class="fas fa-user-plus"></i> Register</a></li>
+                        <li><a href="<?php echo url_for('/users/login.php'); ?>"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="<?php echo url_for('/users/register.php'); ?>"><i class="fas fa-user-plus"></i> Register</a></li>
                     <?php } ?>
                 </ul>
             </nav>

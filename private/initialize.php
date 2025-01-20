@@ -6,6 +6,11 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Debug session state
+error_log("Session state in initialize.php:");
+error_log("Session ID: " . session_id());
+error_log("Session Data: " . print_r($_SESSION, true));
+
 // Assign file paths to PHP constants
 define("PRIVATE_PATH", dirname(__FILE__));
 define("PROJECT_PATH", dirname(PRIVATE_PATH));
@@ -44,6 +49,10 @@ db_connect();
 
 // Create session object - MUST be after autoload
 $session = new Session();
+
+// Debug session object
+error_log("Session object created:");
+error_log("Is logged in: " . ($session->is_logged_in() ? "true" : "false"));
 
 // Development mode error reporting
 error_reporting(E_ALL);
