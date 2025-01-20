@@ -1,11 +1,26 @@
 <?php
 
+/**
+ * Abstract base class for database objects
+ * Provides common database operations and attribute handling
+ */
 abstract class DatabaseObject {
+    /** @var string Table name for the database object */
     protected static $table_name;
+    
+    /** @var array List of database columns for the object */
     protected static $db_columns = [];
+    
+    /** @var mysqli Database connection instance */
     protected static $database;
+    
+    /** @var array List of validation errors */
     public $errors = [];
 
+    /**
+     * Sets the database connection for all DatabaseObject instances
+     * @param mysqli $database The database connection instance
+     */
     public static function set_database($database) {
         self::$database = $database;
         error_log("Database connection set: " . (self::$database ? "true" : "false"));
@@ -14,6 +29,11 @@ abstract class DatabaseObject {
         }
     }
 
+    /**
+     * Gets the current database connection
+     * @return mysqli The database connection instance
+     * @throws Exception if database connection is not set
+     */
     public static function get_database() {
         if (!isset(self::$database)) {
             error_log("Warning: Database connection not set!");
@@ -22,6 +42,11 @@ abstract class DatabaseObject {
         return self::$database;
     }
 
+    /**
+     * Finds database objects using a custom SQL query
+     * @param string $sql The SQL query to execute
+     * @return array Array of instantiated objects
+     */
     public static function find_by_sql($sql) {
         $database = static::get_database();
         $result = mysqli_query($database, $sql);
@@ -37,11 +62,19 @@ abstract class DatabaseObject {
         return $object_array;
     }
 
+    /**
+     * Finds all records in the table
+     * @return array Array of all objects in the table
+     */
     public static function find_all() {
         $sql = "SELECT * FROM " . static::$table_name;
         return static::find_by_sql($sql);
     }
 
+    /**
+     * Counts all records in the table
+     * @return int Total number of records
+     */
     public static function count_all() {
         $database = static::get_database();
         $sql = "SELECT COUNT(*) FROM " . static::$table_name;
@@ -51,6 +84,11 @@ abstract class DatabaseObject {
         return array_shift($row);
     }
 
+    /**
+     * Finds a single record by its ID
+     * @param mixed $id The ID to search for
+     * @return mixed The found object or false if not found
+     */
     public static function find_by_id($id) {
         $database = static::get_database();
         $sql = "SELECT * FROM " . static::$table_name . " ";
@@ -63,6 +101,11 @@ abstract class DatabaseObject {
         }
     }
 
+    /**
+     * Creates an object instance from a database record
+     * @param array $record The database record
+     * @return static New instance of the class
+     */
     protected static function instantiate($record) {
         $object = new static;
         foreach($record as $property => $value) {
@@ -73,11 +116,19 @@ abstract class DatabaseObject {
         return $object;
     }
 
+    /**
+     * Validates the object's attributes
+     * @return array Array of validation errors
+     */
     protected function validate() {
         $this->errors = [];
         return $this->errors;
     }
 
+    /**
+     * Creates a new record in the database
+     * @return bool True if creation was successful
+     */
     protected function create() {
         $this->validate();
         if(!empty($this->errors)) { return false; }
@@ -103,6 +154,10 @@ abstract class DatabaseObject {
         }
     }
 
+    /**
+     * Updates an existing record in the database
+     * @return bool True if update was successful
+     */
     protected function update() {
         $this->validate();
         if(!empty($this->errors)) { return false; }
@@ -124,6 +179,10 @@ abstract class DatabaseObject {
         return $result;
     }
 
+    /**
+     * Saves the object to the database (creates or updates)
+     * @return bool True if save was successful
+     */
     public function save() {
         if(isset($this->id)) {
             return $this->update();
@@ -132,6 +191,10 @@ abstract class DatabaseObject {
         }
     }
 
+    /**
+     * Merges an array of attributes into the object
+     * @param array $args Array of attributes to merge
+     */
     public function merge_attributes($args=[]) {
         foreach($args as $key => $value) {
             if(property_exists($this, $key) && !is_null($value)) {
@@ -140,6 +203,10 @@ abstract class DatabaseObject {
         }
     }
 
+    /**
+     * Gets all attributes except the primary key
+     * @return array Array of object attributes
+     */
     public function attributes() {
         $attributes = [];
         foreach(static::$db_columns as $column) {
@@ -149,6 +216,10 @@ abstract class DatabaseObject {
         return $attributes;
     }
 
+    /**
+     * Gets sanitized attributes for database operations
+     * @return array Array of sanitized attributes
+     */
     protected function sanitized_attributes() {
         $database = static::get_database();
         $sanitized = [];
@@ -158,6 +229,10 @@ abstract class DatabaseObject {
         return $sanitized;
     }
 
+    /**
+     * Deletes the record from the database
+     * @return bool True if deletion was successful
+     */
     public function delete() {
         $sql = "DELETE FROM " . static::$table_name . " ";
         $sql .= "WHERE " . static::get_primary_key() . "='" . db_escape(static::get_database(), $this->id) . "' ";
@@ -168,6 +243,10 @@ abstract class DatabaseObject {
         return $result;
     }
 
+    /**
+     * Gets the primary key field name
+     * @return string Name of the primary key field
+     */
     protected static function get_primary_key() {
         return isset(static::$primary_key) ? static::$primary_key : 'id';
     }
