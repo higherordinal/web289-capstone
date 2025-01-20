@@ -1,4 +1,6 @@
 .recipe-form {
+    display: grid;
+    gap: 2rem;
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
@@ -9,22 +11,28 @@
 
 .recipe-form h1 {
     color: var(--color-black);
-    margin-bottom: 2rem;
+    margin: 0;
     text-align: center;
     font-family: var(--font-heading);
     border-bottom: 2px solid var(--color-primary);
     padding-bottom: 1rem;
 }
 
+.recipe-form form {
+    display: grid;
+    gap: 2rem;
+}
+
 .recipe-form .form-group {
-    margin-bottom: 1.5rem;
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
 }
 
 .recipe-form label {
-    display: block;
-    margin-bottom: 0.5rem;
     color: var(--color-gray-800);
     font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .recipe-form .form-control {
@@ -61,44 +69,78 @@
 
 .recipe-form h4 {
     color: var(--color-gray-800);
-    margin-bottom: 1rem;
+    margin: 0;
     font-size: 1.1rem;
     font-weight: 600;
     border-left: 3px solid var(--color-primary);
     padding-left: 0.75rem;
 }
 
+/* Grid layout for form sections */
+.recipe-form .row {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--color-gray-50);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-gray-200);
+}
+
+.recipe-form .time-section {
+    display: grid;
+    gap: 1rem;
+}
+
+.recipe-form .time-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Button styles */
+.recipe-form .form-buttons {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+}
+
 .recipe-form .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.625rem 1.25rem;
     border: none;
     border-radius: var(--radius-sm);
     font-weight: 600;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 120px;
 }
 
 .recipe-form .btn-primary {
     background-color: var(--color-primary);
     color: var(--color-white);
-    box-shadow: 0 2px 4px rgba(230, 126, 34, 0.2);
+    box-shadow: 0 1px 3px rgba(230, 126, 34, 0.2);
 }
 
 .recipe-form .btn-primary:hover {
     background-color: var(--color-primary-dark);
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(230, 126, 34, 0.3);
+    box-shadow: 0 2px 4px rgba(230, 126, 34, 0.3);
 }
 
 .recipe-form .btn-secondary {
-    background-color: var(--color-gray-700);
-    color: var(--color-white);
-    margin-left: 1rem;
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-800);
 }
 
 .recipe-form .btn-secondary:hover {
-    background-color: var(--color-gray-800);
+    background-color: var(--color-gray-300);
     transform: translateY(-1px);
 }
 
@@ -106,22 +148,7 @@
     border: 2px solid var(--color-gray-300);
     border-radius: var(--radius-sm);
     padding: 0.25rem;
-}
-
-/* Grid layout adjustments */
-.recipe-form .row {
-    display: grid;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background-color: var(--color-gray-100);
-    border-radius: var(--radius-md);
-}
-
-@media (min-width: 768px) {
-    .recipe-form .row {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
+    max-width: 200px;
 }
 
 /* Error states */
@@ -133,13 +160,24 @@
 .recipe-form .invalid-feedback {
     color: var(--color-error);
     font-size: 0.875rem;
-    margin-top: 0.5rem;
     font-weight: 500;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
     align-items: center;
 }
 
 .recipe-form .invalid-feedback::before {
     content: "⚠";
-    margin-right: 0.5rem;
+}
+
+/* Responsive grid adjustments */
+@media (min-width: 768px) {
+    .recipe-form .row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .recipe-form .row.time-row {
+        grid-template-columns: 1fr 1fr;
+    }
 }
