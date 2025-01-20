@@ -181,3 +181,42 @@
         grid-template-columns: 1fr 1fr;
     }
 }
+
+.star-rating {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    justify-content: start;
+    gap: 0.25rem;
+    direction: rtl;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1.5rem;
+    color: var(--color-gray-300);
+    cursor: pointer;
+    padding: 0 0.1rem;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: var(--color-warning);
+}
+
+.star-rating:hover label:hover,
+.star-rating:hover label:hover ~ label {
+    color: var(--color-warning-light);
+}
+
+.star-rating input:checked + label,
+.star-rating input:checked ~ label {
+    color: var(--color-warning);
+}
+
+.comment-form {
+    /* ... */
+}

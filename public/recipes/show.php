@@ -195,16 +195,16 @@ include(SHARED_PATH . '/header.php');
                   class="comment-form">
                 <h3><i class="fas fa-pen"></i> Write a Review</h3>
                 <div class="star-rating">
-                    <input type="radio" id="star5" name="review[rating]" value="5">
-                    <label for="star5" title="5 stars">★</label>
-                    <input type="radio" id="star4" name="review[rating]" value="4">
-                    <label for="star4" title="4 stars">★</label>
-                    <input type="radio" id="star3" name="review[rating]" value="3">
-                    <label for="star3" title="3 stars">★</label>
-                    <input type="radio" id="star2" name="review[rating]" value="2">
-                    <label for="star2" title="2 stars">★</label>
                     <input type="radio" id="star1" name="review[rating]" value="1">
                     <label for="star1" title="1 star">★</label>
+                    <input type="radio" id="star2" name="review[rating]" value="2">
+                    <label for="star2" title="2 stars">★</label>
+                    <input type="radio" id="star3" name="review[rating]" value="3">
+                    <label for="star3" title="3 stars">★</label>
+                    <input type="radio" id="star4" name="review[rating]" value="4">
+                    <label for="star4" title="4 stars">★</label>
+                    <input type="radio" id="star5" name="review[rating]" value="5">
+                    <label for="star5" title="5 stars">★</label>
                 </div>
 
                 <textarea name="review[comment]" 

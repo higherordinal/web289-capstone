@@ -59,3 +59,11 @@ function has_unique_email($email, $current_id="0") {
     $result->free();
     return $user_count === 0;
 }
+
+function has_number_between($value, $min, $max) {
+    if(!is_numeric($value)) {
+        return false;
+    }
+    $value = (float)$value;
+    return ($value >= $min && $value <= $max);
+}

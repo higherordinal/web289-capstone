@@ -288,9 +288,9 @@
 }
 
 .star-rating {
-    display: grid;
-    grid-template-columns: repeat(5, auto);
-    justify-content: start;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
     gap: 0.25rem;
 }
 
@@ -303,10 +303,21 @@
     color: var(--color-gray-300);
     cursor: pointer;
     padding: 0 0.1rem;
+    transition: color 0.2s ease;
 }
 
 .star-rating label:hover,
 .star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: var(--color-warning);
+}
+
+.star-rating:hover label:hover,
+.star-rating:hover label:hover ~ label {
+    color: var(--color-warning-light);
+}
+
+.star-rating input:checked + label,
 .star-rating input:checked ~ label {
     color: var(--color-warning);
 }
